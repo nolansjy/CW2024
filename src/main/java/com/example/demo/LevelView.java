@@ -2,6 +2,7 @@ package com.example.demo;
 
 import javafx.scene.Group;
 
+// TODO: Make LevelView a parent class of Level
 public class LevelView {
 	
 	private static final double HEART_DISPLAY_X_POSITION = 5;

@@ -78,6 +78,7 @@ public abstract class LevelParent extends Observable {
 		notifyObservers(levelName);
 	}
 
+	// TODO: This is bad!!
 	private void updateScene() {
 		spawnEnemyUnits();
 		updateActors();
