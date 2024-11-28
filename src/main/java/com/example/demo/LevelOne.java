@@ -9,22 +9,23 @@ public class LevelOne extends LevelParent {
 	private static final double ENEMY_SPAWN_PROBABILITY = .20;
 	private static final int PLAYER_INITIAL_HEALTH = 5;
 
-	public LevelOne(double screenHeight, double screenWidth) {
-		super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
+	public LevelOne(final GameScreen game) {
+		super(game, BACKGROUND_IMAGE_NAME, PLAYER_INITIAL_HEALTH);
 	}
 
 	@Override
 	protected void checkIfGameOver() {
 		if (userIsDestroyed()) {
-			loseGame();
+			game.loseGame();
 		}
 		else if (userHasReachedKillTarget())
-			goToNextLevel(NEXT_LEVEL);
+			game.winGame();
+			// goToNextLevel(NEXT_LEVEL);
 	}
 
 	@Override
 	protected void initializeFriendlyUnits() {
-		getRoot().getChildren().add(getUser());
+		game.getRoot().getChildren().add(getUser());
 	}
 
 	@Override
@@ -32,8 +33,8 @@ public class LevelOne extends LevelParent {
 		int currentNumberOfEnemies = getCurrentNumberOfEnemies();
 		for (int i = 0; i < TOTAL_ENEMIES - currentNumberOfEnemies; i++) {
 			if (Math.random() < ENEMY_SPAWN_PROBABILITY) {
-				double newEnemyInitialYPosition = Math.random() * getEnemyMaximumYPosition();
-				ActiveActorDestructible newEnemy = new EnemyPlane(getScreenWidth(), newEnemyInitialYPosition);
+				double newEnemyInitialYPosition = Math.random() * game.getEnemyMaximumYPosition();
+				ActiveActorDestructible newEnemy = new EnemyPlane(game.getScreenWidth(), newEnemyInitialYPosition);
 				addEnemyUnit(newEnemy);
 			}
 		}
@@ -41,7 +42,7 @@ public class LevelOne extends LevelParent {
 
 	@Override
 	protected LevelView instantiateLevelView() {
-		return new LevelView(getRoot(), PLAYER_INITIAL_HEALTH);
+		return new LevelView(game.getRoot(), PLAYER_INITIAL_HEALTH);
 	}
 
 	private boolean userHasReachedKillTarget() {
