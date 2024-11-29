@@ -13,16 +13,9 @@ import javafx.util.Duration;
 
 public abstract class LevelParent extends Observable {
 
-//	private static final double SCREEN_HEIGHT_ADJUSTMENT = 150;
-	private static final int MILLISECOND_DELAY = 50;
-//	private final double screenHeight;
-//	private final double screenWidth;
-	
 	private final Group root;
-	private final Timeline timeline;
 	private final Scene scene;
 	private final ImageView background;
-
 	private final UserPlane user;
 	private final List<ActiveActorDestructible> friendlyUnits;
 	private final List<ActiveActorDestructible> enemyUnits;
@@ -36,7 +29,6 @@ public abstract class LevelParent extends Observable {
 	public LevelParent(final GameScreen game, String backgroundImageName, int playerInitialHealth) {
 		this.game = game;
 		this.root = game.getRoot();		
-		this.timeline = game.getTimeline();
 		this.scene = game.getScene();
 		this.background = new ImageView(new Image(getClass().getResource(backgroundImageName).toExternalForm()));
 		this.user = new UserPlane(playerInitialHealth);
@@ -46,32 +38,8 @@ public abstract class LevelParent extends Observable {
 		this.enemyProjectiles = new ArrayList<>();
 		this.levelView = instantiateLevelView();
 		this.currentNumberOfEnemies = 0;
-		initializeBackground();
-		initializeFriendlyUnits();
-		levelView.showHeartDisplay();
-		initializeTimeline();
 		friendlyUnits.add(user);
 	}
-
-//	public LevelParent(String backgroundImageName, double screenHeight, double screenWidth, int playerInitialHealth) {
-//		this.root = new Group();
-//		this.scene = new Scene(root, screenWidth, screenHeight);
-//		this.timeline = new Timeline();
-//		this.user = new UserPlane(playerInitialHealth);
-//		this.friendlyUnits = new ArrayList<>();
-//		this.enemyUnits = new ArrayList<>();
-//		this.userProjectiles = new ArrayList<>();
-//		this.enemyProjectiles = new ArrayList<>();
-//
-//		this.background = new ImageView(new Image(getClass().getResource(backgroundImageName).toExternalForm()));
-//		this.screenHeight = screenHeight;
-//		this.screenWidth = screenWidth;
-//		this.enemyMaximumYPosition = screenHeight - SCREEN_HEIGHT_ADJUSTMENT;
-//		this.levelView = instantiateLevelView();
-//		this.currentNumberOfEnemies = 0;
-//		initializeTimeline();
-//		friendlyUnits.add(user);
-//	}
 
 	protected abstract void initializeFriendlyUnits();
 
@@ -81,25 +49,13 @@ public abstract class LevelParent extends Observable {
 
 	protected abstract LevelView instantiateLevelView();
 
-//	public Scene initializeScene() {
-//		initializeBackground();
-//		initializeFriendlyUnits();
-//		levelView.showHeartDisplay();
-//		return scene;
-//	}
-//
-//	public void startLevel() {
-//		background.requestFocus();
-//		timeline.play();
-//	}
-
 	public void goToNextLevel(String levelName) {
 		setChanged();
 		notifyObservers(levelName);
 	}
 
 	// TODO: This is bad!!
-	private void updateScene() {
+	protected void updateScene() {
 		spawnEnemyUnits();
 		updateActors();
 		generateEnemyFire();
@@ -113,18 +69,8 @@ public abstract class LevelParent extends Observable {
 		updateLevelView();
 		checkIfGameOver();
 	}
+	
 
-	private void initializeTimeline() {
-		timeline.setCycleCount(Timeline.INDEFINITE);
-		KeyFrame gameLoop = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> updateScene());
-		timeline.getKeyFrames().add(gameLoop);
-	}
-	
-	public void startLevel() {
-		background.requestFocus();
-		timeline.play();
-	}
-	
 	public Scene initializeScene() {
 		initializeBackground();
 		initializeFriendlyUnits();
@@ -132,8 +78,10 @@ public abstract class LevelParent extends Observable {
 		return scene;
 	}
 
-	private void initializeBackground() {
-		game.setBackground(background);
+	protected void initializeBackground() {
+		background.setFocusTraversable(true);
+		background.setFitHeight(game.getScreenHeight());
+		background.setFitWidth(game.getScreenWidth());
 		background.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
 				KeyCode kc = e.getCode();
@@ -148,6 +96,7 @@ public abstract class LevelParent extends Observable {
 				if (kc == KeyCode.UP || kc == KeyCode.DOWN) user.stop();
 			}
 		});
+		root.getChildren().add(background);
 	}
 
 	private void fireProjectile() {
@@ -258,6 +207,8 @@ public abstract class LevelParent extends Observable {
 		currentNumberOfEnemies = enemyUnits.size();
 	}
 	
-	
+	protected ImageView getBackground() {
+		return background;
+	}
 
 }

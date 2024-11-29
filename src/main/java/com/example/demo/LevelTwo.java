@@ -7,23 +7,23 @@ public class LevelTwo extends LevelParent {
 	private final Boss boss;
 	private LevelViewLevelTwo levelView;
 
-	public LevelTwo(double screenHeight, double screenWidth) {
-		super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
+	public LevelTwo(final GameScreen game) {
+		super(game, BACKGROUND_IMAGE_NAME,  PLAYER_INITIAL_HEALTH);
 		boss = new Boss();
 	}
 
 	@Override
 	protected void initializeFriendlyUnits() {
-		getRoot().getChildren().add(getUser());
+		game.getRoot().getChildren().add(getUser());
 	}
 
 	@Override
 	protected void checkIfGameOver() {
 		if (userIsDestroyed()) {
-			loseGame();
+			game.loseGame();
 		}
 		else if (boss.isDestroyed()) {
-			winGame();
+			game.winGame();
 		}
 	}
 
@@ -36,7 +36,7 @@ public class LevelTwo extends LevelParent {
 
 	@Override
 	protected LevelView instantiateLevelView() {
-		levelView = new LevelViewLevelTwo(getRoot(), PLAYER_INITIAL_HEALTH);
+		levelView = new LevelViewLevelTwo(game.getRoot(), PLAYER_INITIAL_HEALTH);
 		return levelView;
 	}
 

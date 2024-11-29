@@ -18,9 +18,9 @@ public class LevelOne extends LevelParent {
 		if (userIsDestroyed()) {
 			game.loseGame();
 		}
-		else if (userHasReachedKillTarget())
-			game.winGame();
-			// goToNextLevel(NEXT_LEVEL);
+		else if (userHasReachedKillTarget()) {
+			goToNextLevel(NEXT_LEVEL);
+		}
 	}
 
 	@Override

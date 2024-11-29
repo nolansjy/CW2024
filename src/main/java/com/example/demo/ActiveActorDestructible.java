@@ -12,6 +12,7 @@ public abstract class ActiveActorDestructible extends ActiveActor implements Des
 	@Override
 	public abstract void updatePosition();
 
+	@Override
 	public abstract void updateActor();
 
 	@Override

@@ -11,10 +11,10 @@ import javafx.scene.image.*;
 import javafx.scene.input.*;
 import javafx.util.Duration;
 
-public class GameScreen extends Observable{
+public class GameScreen {
 	
 	private static final double SCREEN_HEIGHT_ADJUSTMENT = 150;
-//	private static final int MILLISECOND_DELAY = 50;
+	private static final int MILLISECOND_DELAY = 50;
 	private final double screenHeight;
 	private final double screenWidth;
 	
@@ -31,7 +31,7 @@ public class GameScreen extends Observable{
 	private final double enemyMaximumYPosition;
 	private final WinImage winImage;
 	private final GameOverImage gameOverImage;
-	
+	private LevelParent currentLevel;
 
 
 	public GameScreen(double screenHeight, double screenWidth) {
@@ -54,9 +54,16 @@ public class GameScreen extends Observable{
 		timeline.play();
 	}
 	
-	public Scene initializeScene() {
-		initializeBackground();
-		return scene;
+	public void loadLevel(LevelParent level) {
+		this.currentLevel = level;
+		background = currentLevel.getBackground();
+		initializeTimeline();
+	}
+
+	private void initializeTimeline() {
+		timeline.setCycleCount(Timeline.INDEFINITE);
+		KeyFrame gameLoop = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> currentLevel.updateScene());
+		timeline.getKeyFrames().add(gameLoop);
 	}
 	
 	private void initializeBackground() {
@@ -65,14 +72,6 @@ public class GameScreen extends Observable{
 		background.setFitWidth(screenWidth);
 		root.getChildren().add(background);
 	}
-	
-	protected void setBackground(ImageView background) {
-		this.background = background;
-		background.setFocusTraversable(true);
-		background.setFitHeight(screenHeight);
-		background.setFitWidth(screenWidth);
-		root.getChildren().add(background);
-	};
 	
 	protected void winGame() {
 		timeline.stop();
@@ -102,6 +101,10 @@ public class GameScreen extends Observable{
 		return enemyMaximumYPosition;
 	}
 
+	protected double getScreenHeight() {
+		return screenHeight;
+	}
+	
 	protected double getScreenWidth() {
 		return screenWidth;
 	}

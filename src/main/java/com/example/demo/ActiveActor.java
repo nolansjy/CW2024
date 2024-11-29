@@ -15,6 +15,8 @@ public abstract class ActiveActor extends ImageView {
 		this.setFitHeight(imageHeight);
 		this.setPreserveRatio(true);
 	}
+	
+	public abstract void updateActor();
 
 	public abstract void updatePosition();
 
