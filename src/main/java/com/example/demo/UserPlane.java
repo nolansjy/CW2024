@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import com.example.demo.Boss.BossBuilder;
+
 public class UserPlane extends FighterPlane {
 
 	private static final String IMAGE_NAME = "userplane.png";
@@ -14,9 +16,32 @@ public class UserPlane extends FighterPlane {
 	private int velocityMultiplier;
 	private int numberOfKills;
 
-	public UserPlane(int initialHealth) {
-		super(IMAGE_NAME, IMAGE_HEIGHT, INITIAL_X_POSITION, INITIAL_Y_POSITION, initialHealth);
+	public UserPlane(UserPlaneBuilder builder) {
+		super(builder);
 		velocityMultiplier = 0;
+	}
+	
+	public static class UserPlaneBuilder extends FighterPlaneBuilder {
+
+		@Override 
+		public UserPlaneBuilder setHealth(int health) {
+			this.health = health;
+			return this;
+		}
+		
+		@Override
+		public UserPlaneBuilder load() {
+			setImageView(IMAGE_NAME, IMAGE_HEIGHT, INITIAL_X_POSITION, INITIAL_Y_POSITION);
+			setHitboxHeight(IMAGE_HEIGHT/3);
+			return this;
+		}
+		
+		@Override
+		public UserPlane build() {
+			return new UserPlane(this);
+		}
+	
+		
 	}
 	
 	@Override
@@ -37,8 +62,10 @@ public class UserPlane extends FighterPlane {
 	}
 	
 	@Override
-	public ActiveActorDestructible fireProjectile() {
-		return new UserProjectile(PROJECTILE_X_POSITION, getProjectileYPosition(PROJECTILE_Y_POSITION_OFFSET));
+	public SpriteDestructible fireProjectile() {
+		return new UserProjectile.ProjectileBuilder()
+				.setImagePos(PROJECTILE_X_POSITION, getProjectileYPosition(PROJECTILE_Y_POSITION_OFFSET))
+				.load().build();
 	}
 
 	private boolean isMoving() {

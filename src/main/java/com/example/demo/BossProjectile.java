@@ -1,5 +1,6 @@
 package com.example.demo;
 
+
 public class BossProjectile extends Projectile {
 	
 	private static final String IMAGE_NAME = "fireball.png";
@@ -7,8 +8,8 @@ public class BossProjectile extends Projectile {
 	private static final int HORIZONTAL_VELOCITY = -15;
 	private static final int INITIAL_X_POSITION = 950;
 
-	public BossProjectile(double initialYPos) {
-		super(IMAGE_NAME, IMAGE_HEIGHT, INITIAL_X_POSITION, initialYPos);
+	public BossProjectile(ProjectileBuilder builder) {
+		super(builder);
 	}
 
 	@Override
@@ -19,6 +20,23 @@ public class BossProjectile extends Projectile {
 	@Override
 	public void updateActor() {
 		updatePosition();
+	}
+	
+	public static class ProjectileBuilder extends Projectile.ProjectileBuilder {
+
+		@Override
+		public SpriteHitboxBuilder load() {
+			setImage(IMAGE_NAME, IMAGE_HEIGHT);
+			setX(INITIAL_X_POSITION);
+			setHitboxHeight(IMAGE_HEIGHT/3);
+			return this;
+		}
+
+		@Override
+		public SpriteDestructible build() {
+			return new BossProjectile(this);
+		}
+		
 	}
 	
 }

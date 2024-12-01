@@ -2,12 +2,12 @@ package com.example.demo;
 
 public class EnemyProjectile extends Projectile {
 	
-	private static final String IMAGE_NAME = "enemyFire.png";
+	private static final String IMAGE_NAME = "enemyfire-debug.png";
 	private static final int IMAGE_HEIGHT = 50;
 	private static final int HORIZONTAL_VELOCITY = -10;
 
-	public EnemyProjectile(double initialXPos, double initialYPos) {
-		super(IMAGE_NAME, IMAGE_HEIGHT, initialXPos, initialYPos);
+	public EnemyProjectile(ProjectileBuilder builder) {
+		super(builder);
 	}
 
 	@Override
@@ -19,6 +19,21 @@ public class EnemyProjectile extends Projectile {
 	public void updateActor() {
 		updatePosition();
 	}
+	
+	public static class ProjectileBuilder extends Projectile.ProjectileBuilder {
 
+		@Override
+		public SpriteHitboxBuilder load() {
+			setImage(IMAGE_NAME, IMAGE_HEIGHT);
+			setHitboxHeight(IMAGE_HEIGHT/3);
+			return this;
+		}
+
+		@Override
+		public SpriteDestructible build() {
+			return new EnemyProjectile(this);
+		}
+		
+	}
 
 }

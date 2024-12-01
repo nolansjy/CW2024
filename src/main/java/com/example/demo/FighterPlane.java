@@ -1,15 +1,15 @@
 package com.example.demo;
 
-public abstract class FighterPlane extends ActiveActorDestructible {
+public abstract class FighterPlane extends SpriteDestructible {
 
 	private int health;
 
-	public FighterPlane(String imageName, int imageHeight, double initialXPos, double initialYPos, int health) {
-		super(imageName, imageHeight, initialXPos, initialYPos);
-		this.health = health;
+	public FighterPlane(FighterPlaneBuilder builder) {
+		super(builder);
+		this.health = builder.health;
 	}
 
-	public abstract ActiveActorDestructible fireProjectile();
+	public abstract SpriteDestructible fireProjectile();
 	
 	@Override
 	public void takeDamage() {
@@ -33,6 +33,17 @@ public abstract class FighterPlane extends ActiveActorDestructible {
 
 	public int getHealth() {
 		return health;
+	}
+	
+	public abstract static class FighterPlaneBuilder extends SpriteHitboxBuilder {
+
+		protected int health;
+				
+		public FighterPlaneBuilder setHealth(int health) {
+			this.health = health;
+			return this;
+		}		
+		
 	}
 		
 }

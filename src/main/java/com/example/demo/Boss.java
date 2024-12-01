@@ -2,37 +2,63 @@ package com.example.demo;
 
 import java.util.*;
 
+import com.example.demo.FighterPlane.FighterPlaneBuilder;
+
 public class Boss extends FighterPlane {
 
 	private static final String IMAGE_NAME = "bossplane.png";
+	private static final int IMAGE_HEIGHT = 300;
 	private static final double INITIAL_X_POSITION = 1000.0;
 	private static final double INITIAL_Y_POSITION = 400;
 	private static final double PROJECTILE_Y_POSITION_OFFSET = 75.0;
 	private static final double BOSS_FIRE_RATE = .04;
-	private static final double BOSS_SHIELD_PROBABILITY = .002;
-	private static final int IMAGE_HEIGHT = 300;
+	private static final double BOSS_SHIELD_PROBABILITY = .002;	
 	private static final int VERTICAL_VELOCITY = 8;
-	private static final int HEALTH = 100;
 	private static final int MOVE_FREQUENCY_PER_CYCLE = 5;
 	private static final int ZERO = 0;
 	private static final int MAX_FRAMES_WITH_SAME_MOVE = 10;
 	private static final int Y_POSITION_UPPER_BOUND = -100;
 	private static final int Y_POSITION_LOWER_BOUND = 475;
 	private static final int MAX_FRAMES_WITH_SHIELD = 500;
+	
 	private final List<Integer> movePattern;
 	private boolean isShielded;
 	private int consecutiveMovesInSameDirection;
 	private int indexOfCurrentMove;
 	private int framesWithShieldActivated;
 
-	public Boss() {
-		super(IMAGE_NAME, IMAGE_HEIGHT, INITIAL_X_POSITION, INITIAL_Y_POSITION, HEALTH);
+	public Boss(BossBuilder builder) {
+		super(builder);
 		movePattern = new ArrayList<>();
 		consecutiveMovesInSameDirection = 0;
 		indexOfCurrentMove = 0;
 		framesWithShieldActivated = 0;
 		isShielded = false;
 		initializeMovePattern();
+	}
+	
+	public static class BossBuilder extends FighterPlaneBuilder {		
+
+		@Override 
+		public BossBuilder setHealth(int health) {
+			this.health = health;
+			return this;
+		}	
+		
+		@Override
+		public BossBuilder load() {
+			setImageView(IMAGE_NAME, IMAGE_HEIGHT, INITIAL_X_POSITION, INITIAL_Y_POSITION);
+			setHitboxHeight(IMAGE_HEIGHT/3);
+			return this;
+		}
+		
+		
+		@Override
+		public Boss build() {
+			return new Boss(this);
+		}
+				
+		
 	}
 
 	@Override
@@ -52,8 +78,11 @@ public class Boss extends FighterPlane {
 	}
 
 	@Override
-	public ActiveActorDestructible fireProjectile() {
-		return bossFiresInCurrentFrame() ? new BossProjectile(getProjectileInitialPosition()) : null;
+	public SpriteDestructible fireProjectile() {
+		return bossFiresInCurrentFrame()  
+		?  new BossProjectile.ProjectileBuilder()
+		  .setY(getProjectileInitialPosition()).load().build() 
+		: null;
 	}
 	
 	@Override
@@ -108,7 +137,7 @@ public class Boss extends FighterPlane {
 		return framesWithShieldActivated == MAX_FRAMES_WITH_SHIELD;
 	}
 
-	private void activateShield() {
+	private void activateShield() {		
 		isShielded = true;
 	}
 

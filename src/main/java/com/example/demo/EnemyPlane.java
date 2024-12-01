@@ -10,8 +10,25 @@ public class EnemyPlane extends FighterPlane {
 	private static final int INITIAL_HEALTH = 1;
 	private static final double FIRE_RATE = .01;
 
-	public EnemyPlane(double initialXPos, double initialYPos) {
-		super(IMAGE_NAME, IMAGE_HEIGHT, initialXPos, initialYPos, INITIAL_HEALTH);
+	public EnemyPlane(EnemyPlaneBuilder builder) {
+		super(builder);
+	}
+	
+	public static class EnemyPlaneBuilder extends FighterPlaneBuilder {
+
+		@Override
+		public SpriteHitboxBuilder load() {
+			setImage(IMAGE_NAME, IMAGE_HEIGHT);
+			setHitboxHeight(IMAGE_HEIGHT/3);
+			setHealth(INITIAL_HEALTH);
+			return this;
+		}
+		
+		@Override
+		public SpriteDestructible build() {
+			return new EnemyPlane(this);
+		}		
+		
 	}
 
 	@Override
@@ -20,11 +37,13 @@ public class EnemyPlane extends FighterPlane {
 	}
 
 	@Override
-	public ActiveActorDestructible fireProjectile() {
+	public SpriteDestructible fireProjectile() {
 		if (Math.random() < FIRE_RATE) {
 			double projectileXPosition = getProjectileXPosition(PROJECTILE_X_POSITION_OFFSET);
 			double projectileYPostion = getProjectileYPosition(PROJECTILE_Y_POSITION_OFFSET);
-			return new EnemyProjectile(projectileXPosition, projectileYPostion);
+			return (SpriteDestructible) new EnemyProjectile.ProjectileBuilder()
+					.setImagePos(projectileXPosition, projectileYPostion)
+					.load().build();
 		}
 		return null;
 	}
