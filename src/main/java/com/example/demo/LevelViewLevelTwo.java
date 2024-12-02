@@ -10,6 +10,7 @@ public class LevelViewLevelTwo extends LevelView {
 
 	private static final int SHIELD_X_POSITION = 1150;
 	private static final int SHIELD_Y_POSITION = 500;
+	private static final int HEALTHBAR_WIDTH = 400;
 	private final Group root;
 	private final ShieldImage shieldImage;
 	private final Rectangle healthBar;
@@ -20,13 +21,14 @@ public class LevelViewLevelTwo extends LevelView {
 		super(root, heartsToDisplay);
 		this.root = root;
 		this.shieldImage = new ShieldImage(SHIELD_X_POSITION, SHIELD_Y_POSITION);
-		this.healthBar = new Rectangle(450,50,400,10);
-		this.healthBarBG = new Rectangle(448,48,406,15);
+		this.healthBar = new Rectangle(450,50,HEALTHBAR_WIDTH,10);
+		this.healthBarBG = new Rectangle(448,48,HEALTHBAR_WIDTH+6,15);
 		this.bossHealth = new SimpleDoubleProperty(bossHealth);
 	}
 	
 	public void showBossHealth() {
-		healthBar.widthProperty().bind(bossHealth.multiply(4));
+		double healthBarRatio = HEALTHBAR_WIDTH/bossHealth.doubleValue();
+		healthBar.widthProperty().bind(bossHealth.multiply(healthBarRatio));
 		healthBar.setFill(Color.TOMATO);
 		root.getChildren().addAll(healthBarBG, healthBar);
 	}
