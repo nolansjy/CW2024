@@ -1,15 +1,27 @@
 package com.example.demo;
 
-public class LevelTwo extends LevelParent {
+import javafx.scene.Scene;
 
+public class LevelTwo extends LevelParent {
+	
 	private static final String BACKGROUND_IMAGE_NAME = "/com/example/demo/images/background2.jpg";
 	private static final int PLAYER_INITIAL_HEALTH = 5;
+	private static final int BOSS_HEALTH = 100;
 	private final Boss boss;
 	private LevelViewLevelTwo levelView;
 
 	public LevelTwo(final GameScreen game) {
 		super(game, BACKGROUND_IMAGE_NAME,  PLAYER_INITIAL_HEALTH);
-		boss = new Boss();
+		boss = new Boss.BossBuilder().setHealth(BOSS_HEALTH).load().build();
+	}
+	
+	@Override
+	public Scene initializeScene() {
+		initializeBackground();
+		initializeFriendlyUnits();
+		levelView.showHeartDisplay();
+		levelView.showBossHealth();
+		return scene;
 	}
 
 	@Override
@@ -36,8 +48,14 @@ public class LevelTwo extends LevelParent {
 
 	@Override
 	protected LevelView instantiateLevelView() {
-		levelView = new LevelViewLevelTwo(game.getRoot(), PLAYER_INITIAL_HEALTH);
+		levelView = new LevelViewLevelTwo(game.getRoot(), PLAYER_INITIAL_HEALTH, BOSS_HEALTH);
 		return levelView;
+	}
+	
+	@Override
+	protected void updateLevelView() {
+		levelView.removeHearts(user.getHealth());
+		levelView.updateBossHealth(boss.getHealth());
 	}
 
 }
