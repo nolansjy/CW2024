@@ -46,7 +46,7 @@ public abstract class SpriteDestructible extends Sprite implements Destructible 
 	
 	public abstract static class SpriteHitboxBuilder extends Sprite.SpriteBuilder {
 
-		private double hitboxHeight;
+		protected double hitboxHeight;
 				
 		public SpriteHitboxBuilder setHitboxHeight(double hitboxHeight) {
 			this.hitboxHeight = hitboxHeight;
