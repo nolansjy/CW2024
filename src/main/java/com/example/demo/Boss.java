@@ -4,6 +4,9 @@ import java.util.*;
 
 import com.example.demo.FighterPlane.FighterPlaneBuilder;
 
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+
 public class Boss extends FighterPlane {
 
 	private static final String IMAGE_NAME = "bossplane.png";
@@ -12,7 +15,7 @@ public class Boss extends FighterPlane {
 	private static final double INITIAL_Y_POSITION = 400;
 	private static final double PROJECTILE_Y_POSITION_OFFSET = 75.0;
 	private static final double BOSS_FIRE_RATE = .04;
-	private static final double BOSS_SHIELD_PROBABILITY = .002;	
+	private static final double BOSS_SHIELD_PROBABILITY = .05;	// was 0.02
 	private static final int VERTICAL_VELOCITY = 8;
 	private static final int MOVE_FREQUENCY_PER_CYCLE = 5;
 	private static final int ZERO = 0;
@@ -21,6 +24,7 @@ public class Boss extends FighterPlane {
 	private static final int Y_POSITION_LOWER_BOUND = 475;
 	private static final int MAX_FRAMES_WITH_SHIELD = 500;
 	
+	private final Circle shield;
 	private final List<Integer> movePattern;
 	private boolean isShielded;
 	private int consecutiveMovesInSameDirection;
@@ -29,6 +33,10 @@ public class Boss extends FighterPlane {
 
 	public Boss(BossBuilder builder) {
 		super(builder);
+		this.shield = new Circle(INITIAL_X_POSITION, INITIAL_Y_POSITION, builder.imageHeight/2, Color.GOLD);
+		shield.setOpacity(0.5);
+		shield.setVisible(false);
+		this.getChildren().add(shield);		
 		movePattern = new ArrayList<>();
 		consecutiveMovesInSameDirection = 0;
 		indexOfCurrentMove = 0;
@@ -37,7 +45,8 @@ public class Boss extends FighterPlane {
 		initializeMovePattern();
 	}
 	
-	public static class BossBuilder extends FighterPlaneBuilder {		
+	public static class BossBuilder extends FighterPlaneBuilder {
+		
 
 		@Override 
 		public BossBuilder setHealth(int health) {
@@ -137,11 +146,13 @@ public class Boss extends FighterPlane {
 		return framesWithShieldActivated == MAX_FRAMES_WITH_SHIELD;
 	}
 
-	private void activateShield() {		
+	private void activateShield() {
+		shield.setVisible(true);
 		isShielded = true;
 	}
 
 	private void deactivateShield() {
+		shield.setVisible(false);
 		isShielded = false;
 		framesWithShieldActivated = 0;
 	}
