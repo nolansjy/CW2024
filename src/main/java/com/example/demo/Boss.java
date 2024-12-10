@@ -2,7 +2,6 @@ package com.example.demo;
 
 import java.util.*;
 
-import com.example.demo.FighterPlane.FighterPlaneBuilder;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;

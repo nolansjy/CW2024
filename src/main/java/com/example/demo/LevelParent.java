@@ -3,16 +3,13 @@ package com.example.demo;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import javafx.animation.*;
 import javafx.event.EventHandler;
-import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.*;
 import javafx.scene.input.*;
 import javafx.scene.Node;
-import javafx.util.Duration;
 
 public abstract class LevelParent extends Observable {
 
@@ -57,7 +54,6 @@ public abstract class LevelParent extends Observable {
 		notifyObservers(levelName);
 	}
 
-	// TODO: This is bad!!
 	protected void updateScene() {
 		spawnEnemyUnits();
 		updateActors();

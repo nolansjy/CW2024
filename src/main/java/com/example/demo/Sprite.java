@@ -22,6 +22,9 @@ public abstract class Sprite extends StackPane {
 		this.image = new ImageView(new Image(getClass().getResource(IMAGE_LOCATION + imageName).toExternalForm()));
 		this.image.setFitHeight(imageHeight);
 		this.image.setPreserveRatio(true);
+		this.getChildren().add(image);
+		this.setLayoutX(initialX);
+		this.setLayoutY(initialY);
 	}
 	
 	public abstract void updateActor();
@@ -59,9 +62,7 @@ public abstract static class SpriteBuilder {
 			this.imageName = imageName;
 			this.imageHeight = imageHeight;						
 			return this;
-		}
-		
-		
+		}		
 		
 		public abstract SpriteBuilder load();
 		public abstract Sprite build();

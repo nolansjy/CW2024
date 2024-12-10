@@ -5,12 +5,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Observable;
 import java.util.Observer;
 
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import com.example.demo.GameScreen;
-import com.example.demo.LevelOne;
 import com.example.demo.LevelParent;
 
 public class Controller implements Observer {

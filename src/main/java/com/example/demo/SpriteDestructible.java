@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.example.demo.Sprite.SpriteBuilder;
 
 import javafx.scene.shape.Rectangle;
 
@@ -16,9 +15,8 @@ public abstract class SpriteDestructible extends Sprite implements Destructible 
 		this.hitboxWidth = builder.imageHeight;
 		this.hitboxHeight = builder.hitboxHeight;
 		this.hitbox = new Rectangle(builder.initialX, builder.initialY, hitboxWidth, hitboxHeight);
-		this.getChildren().addAll(hitbox, getImage());
-		this.setLayoutX(builder.initialX);
-		this.setLayoutY(builder.initialY);
+		this.getChildren().add(hitbox);
+		hitbox.toBack();
 		isDestroyed = false;
 	}
 
