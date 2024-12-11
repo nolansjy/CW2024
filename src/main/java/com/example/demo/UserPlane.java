@@ -14,10 +14,12 @@ public class UserPlane extends FighterPlane {
 	private static final int PROJECTILE_Y_POSITION_OFFSET = 20;
 	private int velocityMultiplier;
 	private int numberOfKills;
+	private int movementAxis;
 
 	public UserPlane(UserPlaneBuilder builder) {
 		super(builder);
 		velocityMultiplier = 0;
+		movementAxis = 0;
 	}
 	
 	public static class UserPlaneBuilder extends FighterPlaneBuilder {
@@ -32,6 +34,7 @@ public class UserPlane extends FighterPlane {
 		public UserPlaneBuilder load() {
 			setImageView(IMAGE_NAME, IMAGE_HEIGHT, INITIAL_X_POSITION, INITIAL_Y_POSITION);
 			setHitboxHeight(IMAGE_HEIGHT/3);
+			setDamageTaken(1);
 			return this;
 		}
 		
@@ -45,13 +48,30 @@ public class UserPlane extends FighterPlane {
 	
 	@Override
 	public void updatePosition() {
-		if (isMoving()) {
-			double initialTranslateY = getTranslateY();
-			this.moveVertically(VERTICAL_VELOCITY * velocityMultiplier);
-			double newPosition = getLayoutY() + getTranslateY();
-			if (newPosition < Y_UPPER_BOUND || newPosition > Y_LOWER_BOUND) {
-				this.setTranslateY(initialTranslateY);
+		if (isMoving()) {			
+			if(movingByY()) {
+				moveY();
+			}else {
+				moveX();
 			}
+		}
+	}
+	
+	private void moveY() {
+		double initialTranslateY = getTranslateY();
+		this.moveVertically(VERTICAL_VELOCITY * velocityMultiplier);
+		double newPosition = getLayoutY() + getTranslateY();
+		if (newPosition < Y_UPPER_BOUND || newPosition > Y_LOWER_BOUND) {
+			this.setTranslateY(initialTranslateY);
+		}
+	}
+	
+	private void moveX() {
+		double initialTranslateX = getTranslateX();
+		this.moveHorizontally(VERTICAL_VELOCITY * velocityMultiplier);
+		double newPosition = getLayoutX() + getTranslateX();
+		if (newPosition > 1000 || newPosition < 5) { //TODO: Constant bounds
+			this.setTranslateX(initialTranslateX);
 		}
 	}
 	
@@ -70,13 +90,30 @@ public class UserPlane extends FighterPlane {
 	private boolean isMoving() {
 		return velocityMultiplier != 0;
 	}
+	
+	private boolean movingByY() {
+		return (movementAxis*velocityMultiplier) < 0;
+	}
+	
 
 	public void moveUp() {
+		movementAxis = 1;
 		velocityMultiplier = -1;
 	}
 
 	public void moveDown() {
+		movementAxis = -1;
 		velocityMultiplier = 1;
+	}
+	
+	public void moveFront() {
+		movementAxis = 1;
+		velocityMultiplier = 1;
+	}
+	
+	public void moveBack() {
+		movementAxis = -1;
+		velocityMultiplier = -1;
 	}
 
 	public void stop() {

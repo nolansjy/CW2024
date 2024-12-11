@@ -85,6 +85,8 @@ public abstract class LevelParent extends Observable {
 			public void handle(KeyEvent e) {
 				KeyCode kc = e.getCode();
 				if (kc == KeyCode.UP) user.moveUp();
+				if (kc == KeyCode.RIGHT) user.moveFront();
+				if (kc == KeyCode.LEFT) user.moveBack();
 				if (kc == KeyCode.DOWN) user.moveDown();
 				if (kc == KeyCode.SPACE) fireProjectile();
 			}
@@ -92,7 +94,10 @@ public abstract class LevelParent extends Observable {
 		background.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
 				KeyCode kc = e.getCode();
-				if (kc == KeyCode.UP || kc == KeyCode.DOWN) user.stop();
+				if (kc == KeyCode.UP    || 
+					kc == KeyCode.DOWN  || 
+					kc == KeyCode.RIGHT ||
+					kc == KeyCode.LEFT) user.stop();
 			}
 		});
 		root.getChildren().add(background);
