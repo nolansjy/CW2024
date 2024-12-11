@@ -19,7 +19,7 @@ public abstract class Sprite extends StackPane {
 		this.initialX = builder.initialX;
 		this.initialY = builder.initialY;
 		this.setPrefSize(imageHeight, imageHeight);
-		this.image = new ImageView(new Image(getClass().getResource(IMAGE_LOCATION + imageName).toExternalForm()));
+		this.image = new ImageView(new Image(getClass().getResourceAsStream(IMAGE_LOCATION + imageName)));
 		this.image.setFitHeight(imageHeight);
 		this.image.setPreserveRatio(true);
 		this.getChildren().add(image);
