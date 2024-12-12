@@ -1,7 +1,11 @@
 package com.example.demo;
 
+import java.beans.PropertyChangeSupport;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import com.example.demo.controller.Controller;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
@@ -11,13 +15,14 @@ import javafx.scene.image.*;
 import javafx.scene.input.*;
 import javafx.scene.Node;
 
-public abstract class LevelParent extends Observable {
+public abstract class LevelParent {
 
+	private static final String IMAGE_LOCATION = "/com/example/demo/images/";
+	private static final String DATA_LOCATION = "/com/example/demo/data/";
 	private final Group root;
 	protected final Scene scene;
 	private final ImageView background;
 	protected final UserPlane user;
-	protected final int difficulty;
 	
 	private final List<SpriteDestructible> friendlyUnits;
 	private final List<SpriteDestructible> enemyUnits;
@@ -28,16 +33,16 @@ public abstract class LevelParent extends Observable {
 	private LevelView levelView;
 	protected GameScreen game;
 	protected int playerHealth;
+	
+	private PropertyChangeSupport support;
 
 	
-	public LevelParent(final GameScreen game, String backgroundImageName) {
+	public LevelParent(final GameScreen game, String backgroundImage) {
 		this.game = game;
 		this.root = game.getRoot();		
 		this.scene = game.getScene();
-		this.background = new ImageView(new Image(getClass().getResource(backgroundImageName).toExternalForm()));
-		
-		this.difficulty = game.getDifficulty();
-		this.playerHealth = 5+difficulty;
+		this.background = new ImageView(new Image(getClass().getResourceAsStream(IMAGE_LOCATION+backgroundImage)));
+		this.playerHealth = 5;
 		this.user = new UserPlane.UserPlaneBuilder().setHealth(playerHealth).load().build();
 		this.friendlyUnits = new ArrayList<>();
 		this.enemyUnits = new ArrayList<>();
@@ -46,6 +51,7 @@ public abstract class LevelParent extends Observable {
 		this.levelView = instantiateLevelView();
 		this.currentNumberOfEnemies = 0;
 		friendlyUnits.add(user);
+		support = new PropertyChangeSupport(this);
 	}
 
 	protected abstract void initializeFriendlyUnits();
@@ -56,28 +62,25 @@ public abstract class LevelParent extends Observable {
 
 	protected abstract LevelView instantiateLevelView();
 	
-	public void goToNextLevel(String levelName) {
-		game.getTimeline().stop();
-		setChanged();
-		notifyObservers(levelName);
+	protected ImageView getLevelBackground(int levelStage) {
+		// read from relevant file, read ID, read backgroundImage
+		throw new UnsupportedOperationException();
 	}
-
-	protected void updateScene() {
-		spawnEnemyUnits();
-		updateActors();
-		generateEnemyFire();
-		updateNumberOfEnemies();
-		handleEnemyPenetration();
-		handleUserProjectileCollisions();
-		handleEnemyProjectileCollisions();
-		handlePlaneCollisions();
-		removeAllDestroyedActors();
-		updateKillCount();
-		updateLevelView();
-		checkIfGameOver();
+			
+	protected int getLevelPlayerHealth(int levelStage) {
+		// read from userFile, read ID, read Health
+		throw new UnsupportedOperationException();
 	}
 	
-
+	public void addListener(Controller controller) {
+		support.addPropertyChangeListener(controller);
+	}
+	
+	public void goToNextLevel(String levelName) {
+		game.getTimeline().stop();
+		support.firePropertyChange("level", this.getClass().getName(), levelName);
+	}
+	
 	public Scene initializeScene() {
 		initializeBackground();
 		initializeFriendlyUnits();
@@ -110,6 +113,21 @@ public abstract class LevelParent extends Observable {
 		});
 		root.getChildren().add(background);
 	}
+
+	protected void updateScene() {
+		spawnEnemyUnits();
+		updateActors();
+		generateEnemyFire();
+		updateNumberOfEnemies();
+		handleEnemyPenetration();
+		handleUserProjectileCollisions();
+		handleEnemyProjectileCollisions();
+		handlePlaneCollisions();
+		removeAllDestroyedActors();
+		updateKillCount();
+		updateLevelView();
+		checkIfGameOver();
+	}	
 
 	private void fireProjectile() {
 		SpriteDestructible projectile = user.fireProjectile();

@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Observable;
@@ -11,9 +13,9 @@ import javafx.stage.Stage;
 import com.example.demo.GameScreen;
 import com.example.demo.LevelParent;
 
-public class Controller implements Observer {
+public class Controller implements PropertyChangeListener {
 
-	private static final String LEVEL_ONE_CLASS_NAME = "com.example.demo.LevelOne";
+	private static final String ENEMY_LEVEL_CLASS_NAME = "com.example.demo.EnemyLevel";
 	private final Stage stage;
 	private final GameScreen game;
 
@@ -25,7 +27,7 @@ public class Controller implements Observer {
 	public void launchGame() throws ClassNotFoundException, NoSuchMethodException, SecurityException,
 			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
 			stage.show();
-			goToLevel(LEVEL_ONE_CLASS_NAME);
+			goToLevel(ENEMY_LEVEL_CLASS_NAME);
 	}
 	
 
@@ -34,18 +36,18 @@ public class Controller implements Observer {
 		Class<?> myClass = Class.forName(className); 
 		Constructor<?> constructor = myClass.getConstructor(GameScreen.class); 
 		LevelParent myLevel = (LevelParent) constructor.newInstance(game);
-		myLevel.addObserver(this);
+		myLevel.addListener(this);
 		stage.setScene(myLevel.initializeScene());
 		game.loadLevel(myLevel);
 		game.startGame();
 	
 	}
-	 
 
 	@Override
-	public void update(Observable arg0, Object arg1) {
-		try {
-			goToLevel((String) arg1);
+	public void propertyChange(PropertyChangeEvent evt) {		
+		try {		
+			goToLevel((String) evt.getNewValue());
+			
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
 				| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			Alert alert = new Alert(AlertType.ERROR);
