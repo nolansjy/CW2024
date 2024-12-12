@@ -1,0 +1,30 @@
+[
+  {
+    "background": "boss_bg1.jpg",
+    "bossHealth": 100,
+    "fireRate": 0.04,
+    "shieldProbability": ".002",
+    "maxShieldFrames": 500
+  },
+  {
+    "background": "boss_bg1.jpg",
+    "bossHealth": 50,
+    "fireRate": 0.02,
+    "shieldProbability": ".001",
+    "maxShieldFrames": 100
+  },
+  {
+    "background": "boss_bg2.jpg",
+    "bossHealth": 75,
+    "fireRate": 0.03,
+    "shieldProbability": ".002",
+    "maxShieldFrames": 200
+  },
+  {
+    "background": "boss_bg3.jpg",
+    "bossHealth": 100,
+    "fireRate": 0.04,
+    "shieldProbability": ".002",
+    "maxShieldFrames": 300
+  }
+]

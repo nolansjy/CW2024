@@ -6,7 +6,7 @@ import java.util.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class Boss extends FighterPlane {
+public class Boss extends EnemyPlane {
 
 	private static final String IMAGE_NAME = "bossplane.png";
 	private static final int IMAGE_HEIGHT = 300;
@@ -14,7 +14,7 @@ public class Boss extends FighterPlane {
 	private static final double INITIAL_Y_POSITION = 400;
 	private static final double PROJECTILE_Y_POSITION_OFFSET = 75.0;
 	private static final double BOSS_FIRE_RATE = .04;
-	private static final double BOSS_SHIELD_PROBABILITY = .05;	// was 0.02
+	private static final double BOSS_SHIELD_PROBABILITY = .002;	
 	private static final int VERTICAL_VELOCITY = 8;
 	private static final int MOVE_FREQUENCY_PER_CYCLE = 5;
 	private static final int ZERO = 0;
@@ -22,6 +22,7 @@ public class Boss extends FighterPlane {
 	private static final int Y_POSITION_UPPER_BOUND = -100;
 	private static final int Y_POSITION_LOWER_BOUND = 475;
 	private static final int MAX_FRAMES_WITH_SHIELD = 500;
+	private static final int DAMAGE_TAKEN = 5;
 	
 	private final Circle shield;
 	private final List<Integer> movePattern;
@@ -29,13 +30,18 @@ public class Boss extends FighterPlane {
 	private int consecutiveMovesInSameDirection;
 	private int indexOfCurrentMove;
 	private int framesWithShieldActivated;
+	private final int maxShieldFrames;
+	private final double shieldProbability;
 
 	public Boss(BossBuilder builder) {
 		super(builder);
 		this.shield = new Circle(INITIAL_X_POSITION, INITIAL_Y_POSITION, builder.imageHeight/2, Color.GOLD);
 		shield.setOpacity(0.5);
 		shield.setVisible(false);
-		this.getChildren().add(shield);		
+		this.getChildren().add(shield);				
+		this.shieldProbability = builder.shieldProbability;
+		this.maxShieldFrames = builder.maxShieldFrames;
+		
 		movePattern = new ArrayList<>();
 		consecutiveMovesInSameDirection = 0;
 		indexOfCurrentMove = 0;
@@ -44,8 +50,16 @@ public class Boss extends FighterPlane {
 		initializeMovePattern();
 	}
 	
-	public static class BossBuilder extends FighterPlaneBuilder {
+	public static class BossBuilder extends EnemyPlaneBuilder {
 		
+		protected final double shieldProbability;
+		protected final int maxShieldFrames;
+
+		public BossBuilder(int health, double fireRate, double shieldProbability, int maxShieldFrames) {
+			super(health, fireRate);
+			this.shieldProbability = shieldProbability;
+			this.maxShieldFrames = maxShieldFrames;
+		}
 
 		@Override 
 		public BossBuilder setHealth(int health) {
@@ -57,6 +71,7 @@ public class Boss extends FighterPlane {
 		public BossBuilder load() {
 			setImageView(IMAGE_NAME, IMAGE_HEIGHT, INITIAL_X_POSITION, INITIAL_Y_POSITION);
 			setHitboxHeight(IMAGE_HEIGHT/3);
+			setDamageTaken(DAMAGE_TAKEN);
 			return this;
 		}
 		
@@ -138,11 +153,11 @@ public class Boss extends FighterPlane {
 	}
 
 	private boolean shieldShouldBeActivated() {
-		return Math.random() < BOSS_SHIELD_PROBABILITY;
+		return Math.random() < shieldProbability;
 	}
 
 	private boolean shieldExhausted() {
-		return framesWithShieldActivated == MAX_FRAMES_WITH_SHIELD;
+		return framesWithShieldActivated == maxShieldFrames;
 	}
 
 	private void activateShield() {

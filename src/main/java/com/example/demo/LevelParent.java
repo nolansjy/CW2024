@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import java.beans.PropertyChangeSupport;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,11 +38,12 @@ public abstract class LevelParent {
 	private PropertyChangeSupport support;
 
 	
-	public LevelParent(final GameScreen game, String backgroundImage) {
+	public LevelParent(final GameScreen game) throws IOException {
 		this.game = game;
 		this.root = game.getRoot();		
 		this.scene = game.getScene();
-		this.background = new ImageView(new Image(getClass().getResourceAsStream(IMAGE_LOCATION+backgroundImage)));
+		this.background = getBackground(getBackgroundFile(game.getLevelStage()));
+		//this.background = new ImageView(new Image(getClass().getResourceAsStream(IMAGE_LOCATION+backgroundImage)));
 		this.playerHealth = 5;
 		this.user = new UserPlane.UserPlaneBuilder().setHealth(playerHealth).load().build();
 		this.friendlyUnits = new ArrayList<>();
@@ -62,14 +64,14 @@ public abstract class LevelParent {
 
 	protected abstract LevelView instantiateLevelView();
 	
-	protected ImageView getLevelBackground(int levelStage) {
-		// read from relevant file, read ID, read backgroundImage
-		throw new UnsupportedOperationException();
+	protected abstract String getBackgroundFile(int levelStage) throws IOException;
+	
+	protected ImageView getBackground(String file) {
+		return new ImageView(new Image(getClass().getResourceAsStream(IMAGE_LOCATION+file)));
 	}
 			
 	protected int getLevelPlayerHealth(int levelStage) {
-		// read from userFile, read ID, read Health
-		throw new UnsupportedOperationException();
+		return 2+levelStage;
 	}
 	
 	public void addListener(Controller controller) {

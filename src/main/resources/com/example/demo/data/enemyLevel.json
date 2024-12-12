@@ -1,0 +1,34 @@
+[
+  {
+    "background": "enemy_bg1.jpg",
+    "enemyHealth": 1,
+    "fireRate": 0.01,
+    "totalEnemies": 5,
+    "killsToAdvance": 10,
+    "spawnRate": 0.2
+  },
+  {
+    "background": "enemy_bg1.jpg",
+    "enemyHealth": 1,
+    "fireRate": 0.01,
+    "totalEnemies": 3,
+    "killsToAdvance": 5,
+    "spawnRate": 0.1
+  },
+  {
+    "background": "enemy_bg2.jpg",
+    "enemyHealth": 1,
+    "fireRate": 0.01,
+    "totalEnemies": 4,
+    "killsToAdvance": 6,
+    "spawnRate": 0.15
+  },
+  {
+    "background": "enemy_bg3.jpg",
+    "enemyHealth": 1,
+    "fireRate": 0.01,
+    "totalEnemies": 5,
+    "killsToAdvance": 8,
+    "spawnRate": 0.2
+  }
+]
