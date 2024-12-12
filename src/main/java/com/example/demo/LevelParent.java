@@ -17,6 +17,8 @@ public abstract class LevelParent extends Observable {
 	protected final Scene scene;
 	private final ImageView background;
 	protected final UserPlane user;
+	protected final int difficulty;
+	
 	private final List<SpriteDestructible> friendlyUnits;
 	private final List<SpriteDestructible> enemyUnits;
 	private final List<SpriteDestructible> userProjectiles;
@@ -25,13 +27,18 @@ public abstract class LevelParent extends Observable {
 	private int currentNumberOfEnemies;
 	private LevelView levelView;
 	protected GameScreen game;
+	protected int playerHealth;
+
 	
-	public LevelParent(final GameScreen game, String backgroundImageName, int playerInitialHealth) {
+	public LevelParent(final GameScreen game, String backgroundImageName) {
 		this.game = game;
 		this.root = game.getRoot();		
 		this.scene = game.getScene();
 		this.background = new ImageView(new Image(getClass().getResource(backgroundImageName).toExternalForm()));
-		this.user = new UserPlane.UserPlaneBuilder().setHealth(playerInitialHealth).load().build();
+		
+		this.difficulty = game.getDifficulty();
+		this.playerHealth = 5+difficulty;
+		this.user = new UserPlane.UserPlaneBuilder().setHealth(playerHealth).load().build();
 		this.friendlyUnits = new ArrayList<>();
 		this.enemyUnits = new ArrayList<>();
 		this.userProjectiles = new ArrayList<>();
@@ -48,8 +55,9 @@ public abstract class LevelParent extends Observable {
 	protected abstract void spawnEnemyUnits();
 
 	protected abstract LevelView instantiateLevelView();
-
+	
 	public void goToNextLevel(String levelName) {
+		game.getTimeline().stop();
 		setChanged();
 		notifyObservers(levelName);
 	}

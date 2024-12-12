@@ -1,18 +1,33 @@
 package com.example.demo;
 
+import com.example.demo.Boss.BossBuilder;
+
 import javafx.scene.Scene;
 
-public class LevelTwo extends LevelParent {
+public class BossLevel extends LevelParent {
 	
 	private static final String BACKGROUND_IMAGE_NAME = "/com/example/demo/images/background2.jpg";
-	private static final int PLAYER_INITIAL_HEALTH = 5;
-	private static final int BOSS_HEALTH = 100;
+	private static final String NEXT_LEVEL = "com.example.demo.EnemyLevel";
+	private static final int FINAL_LEVEL_DIFFICULTY = 5;
 	private final Boss boss;
-	private LevelViewLevelTwo levelView;
+	private BossLevelView levelView;
+	
+	protected final int bossHealth;
+	protected final double bossFireRate;
+	protected final double bossShieldProbability;
+	protected final int bossMaxShieldFrames;
 
-	public LevelTwo(final GameScreen game) {
-		super(game, BACKGROUND_IMAGE_NAME,  PLAYER_INITIAL_HEALTH);
-		boss = new Boss.BossBuilder().setHealth(BOSS_HEALTH).load().build();
+	public BossLevel(final GameScreen game) {
+		super(game, BACKGROUND_IMAGE_NAME);
+		this.bossHealth = 50*(difficulty+1);
+		this.bossFireRate = difficulty/100.0*2.0;
+		this.bossShieldProbability = difficulty/100.0;
+		this.bossMaxShieldFrames = 50*(difficulty+1);				
+		boss = createBoss().load().build();
+	}
+	
+	private BossBuilder createBoss() {
+		return new BossBuilder(bossHealth, bossFireRate, bossShieldProbability, bossMaxShieldFrames);
 	}
 	
 	@Override
@@ -35,7 +50,11 @@ public class LevelTwo extends LevelParent {
 			game.loseGame();
 		}
 		else if (boss.isDestroyed()) {
-			game.winGame();
+			game.raiseDifficulty();
+			goToNextLevel(NEXT_LEVEL);
+			if(game.getDifficulty() > FINAL_LEVEL_DIFFICULTY) {
+				game.winGame();
+			}
 		}
 	}
 
@@ -48,7 +67,8 @@ public class LevelTwo extends LevelParent {
 
 	@Override
 	protected LevelView instantiateLevelView() {
-		levelView = new LevelViewLevelTwo(game.getRoot(), PLAYER_INITIAL_HEALTH, BOSS_HEALTH);
+		int bossHealth = 50*(difficulty+1);
+		levelView = new BossLevelView(game.getRoot(), playerHealth, bossHealth);
 		return levelView;
 	}
 	

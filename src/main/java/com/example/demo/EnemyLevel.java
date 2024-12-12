@@ -1,17 +1,30 @@
 package com.example.demo;
 
-public class LevelOne extends LevelParent {
+import com.example.demo.EnemyPlane.EnemyPlaneBuilder;
+
+public class EnemyLevel extends LevelParent {
 	
 	private static final String BACKGROUND_IMAGE_NAME = "/com/example/demo/images/background1.jpg";
-	private static final String NEXT_LEVEL = "com.example.demo.LevelTwo";
+	private static final String NEXT_LEVEL = "com.example.demo.BossLevel";
 	private static final int TOTAL_ENEMIES = 5;
 	private static final int KILLS_TO_ADVANCE = 10;
 	private static final double ENEMY_SPAWN_PROBABILITY = .20;
-	private static final int PLAYER_INITIAL_HEALTH = 5;
+	
+	private final int enemyHealth;
+	private final double enemyFireRate;
+	private final int totalEnemies;
+	private final int killsToAdvance;
+	private final double enemySpawnProbability;
 
-	public LevelOne(final GameScreen game) {
-		super(game, BACKGROUND_IMAGE_NAME, PLAYER_INITIAL_HEALTH);
+	public EnemyLevel(final GameScreen game) {
+		super(game, BACKGROUND_IMAGE_NAME);
+		this.enemyHealth = Math.round(0.5f*difficulty);
+		this.enemyFireRate = difficulty/100.0;
+		this.totalEnemies = 2*difficulty+1;
+		this.killsToAdvance = 2*(difficulty+1);
+		this.enemySpawnProbability = 0.05*(difficulty+1);
 	}
+	
 
 	@Override
 	protected void checkIfGameOver() {
@@ -31,24 +44,28 @@ public class LevelOne extends LevelParent {
 	@Override
 	protected void spawnEnemyUnits() {
 		int currentNumberOfEnemies = getCurrentNumberOfEnemies();
-		for (int i = 0; i < TOTAL_ENEMIES - currentNumberOfEnemies; i++) {
-			if (Math.random() < ENEMY_SPAWN_PROBABILITY) {
+		for (int i = 0; i < totalEnemies - currentNumberOfEnemies; i++) {
+			if (Math.random() < enemySpawnProbability) {
 				double newEnemyInitialYPosition = Math.random() * game.getEnemyMaximumYPosition();
-				SpriteDestructible newEnemy = new EnemyPlane.EnemyPlaneBuilder()
+				SpriteDestructible newEnemy = getEnemyPlane()
 								.setImagePos(game.getScreenWidth(), newEnemyInitialYPosition)
 								.load().build();
 				addEnemyUnit(newEnemy);
 			}
 		}
 	}
+	
+	private EnemyPlaneBuilder getEnemyPlane() {
+		return new EnemyPlaneBuilder(enemyHealth, enemyFireRate);		
+	}
 
 	@Override
 	protected LevelView instantiateLevelView() {
-		return new LevelView(game.getRoot(), PLAYER_INITIAL_HEALTH);
+		return new LevelView(game.getRoot(), playerHealth);
 	}
 
 	private boolean userHasReachedKillTarget() {
-		return getUser().getNumberOfKills() >= KILLS_TO_ADVANCE;
+		return getUser().getNumberOfKills() >= killsToAdvance;
 	}
 
 }
