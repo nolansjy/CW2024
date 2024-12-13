@@ -24,8 +24,9 @@
       <artifactId>javafx-fxml</artifactId>
       <version>19.0.2</version>
     </dependency>
+   
 
-<dependency>
+	<dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <version>${junit.version}</version>
@@ -36,7 +37,28 @@
       <artifactId>junit-jupiter-engine</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
-    </dependency>  </dependencies>
+    </dependency>
+ 	
+	<dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.18.1</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.testfx</groupId>
+	    <artifactId>testfx-core</artifactId>
+	    <version>4.0.18</version>
+	    <scope>test</scope>
+	</dependency>
+    <dependency>
+      <groupId>org.testfx</groupId>
+      <artifactId>testfx-junit5</artifactId>
+      <version>4.0.18</version>
+      <scope>test</scope>
+	</dependency>
+
+  </dependencies>
 
   <build>
     <plugins>
@@ -45,8 +67,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.11.0</version>
         <configuration>
-          <source>19</source>
-          <target>19</target>
+          <source>22</source>
+          <target>22</target>
         </configuration>
       </plugin>
       <plugin>
