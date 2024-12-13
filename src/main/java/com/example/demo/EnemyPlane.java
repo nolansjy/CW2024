@@ -7,22 +7,35 @@ public class EnemyPlane extends FighterPlane {
 	private static final int HORIZONTAL_VELOCITY = -6;
 	private static final double PROJECTILE_X_POSITION_OFFSET = -100.0;
 	private static final double PROJECTILE_Y_POSITION_OFFSET = 50.0;
-	private static final int INITIAL_HEALTH = 1;
-	private static final double FIRE_RATE = .01;
+	private static final int ENEMY_BASE_HEALTH = 1;
+	private static final int ENEMY_BASE_DAMAGE_TAKEN = 1;
+
+	
+	private final double fireRate;
 
 	public EnemyPlane(EnemyPlaneBuilder builder) {
 		super(builder);
+		this.fireRate = builder.fireRate;
 	}
 	
 	public static class EnemyPlaneBuilder extends FighterPlaneBuilder {
+		
+		protected double fireRate;
+		
+		public EnemyPlaneBuilder(int health, double fireRate) {
+			setHealth(health);
+			this.fireRate = fireRate;
+		}
+		
 
 		@Override
 		public SpriteHitboxBuilder load() {
+			setDamageTaken(ENEMY_BASE_DAMAGE_TAKEN);
 			setImage(IMAGE_NAME, IMAGE_HEIGHT);
 			setHitboxHeight(IMAGE_HEIGHT/3);
-			setHealth(INITIAL_HEALTH);
 			return this;
 		}
+		
 		
 		@Override
 		public SpriteDestructible build() {
@@ -38,7 +51,7 @@ public class EnemyPlane extends FighterPlane {
 
 	@Override
 	public SpriteDestructible fireProjectile() {
-		if (Math.random() < FIRE_RATE) {
+		if (Math.random() < fireRate) {
 			double projectileXPosition = getProjectileXPosition(PROJECTILE_X_POSITION_OFFSET);
 			double projectileYPostion = getProjectileYPosition(PROJECTILE_Y_POSITION_OFFSET);
 			return (SpriteDestructible) new EnemyProjectile.ProjectileBuilder()

@@ -82,6 +82,10 @@ public class GameScreen {
 		timeline.getKeyFrames().add(gameLoop);
 	}
 	
+	protected void setStage(int level) {
+		this.levelStage = level;
+	}
+	
 	protected void raiseStage() {
 		this.levelStage = levelStage+1;
 	}
