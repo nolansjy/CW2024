@@ -15,13 +15,23 @@ public class EnemyPlane extends FighterPlane {
 	
 	private final double fireRate;
 
+	/**
+	 * Constructs FighterPlane and sets fireRate
+	 * @param builder Builder instance
+	 */
 	public EnemyPlane(EnemyPlaneBuilder builder) {
 		super(builder);
 		this.fireRate = builder.fireRate;
 	}
 	
+	/**
+	 * EnemyPlane builder sets fireRate
+	 */
 	public static class EnemyPlaneBuilder extends FighterPlaneBuilder {
 		
+		/**
+		 * Projectile fire rate of EnemyPlane
+		 */
 		protected double fireRate;
 		
 		/**EnemyLevel must set the values of the health and fireRate

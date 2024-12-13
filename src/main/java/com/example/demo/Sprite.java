@@ -73,7 +73,8 @@ public abstract class Sprite extends StackPane {
 	}
 	
 	/**
-	 * @return the base ImageView of the Sprite
+	 * Get ImageView node of the Sprite
+	 * @return ImageView
 	 */
 	protected ImageView getImage() {
 		return this.image;
@@ -91,6 +92,7 @@ public abstract static class SpriteBuilder {
 		protected double initialY;
 		
 		/**
+		 * Sets fields for creating ImageView and positioning it.
 		 * @param imageName   file name of the image
 		 * @param imageHeight fixed height of the image
 		 * @param initialX    initial X position of the image
@@ -106,6 +108,7 @@ public abstract static class SpriteBuilder {
 		}
 		
 		/**
+		 * Sets fields for creating ImageView and resizing it.
 		 * @param imageName   image file name
 		 * @param imageHeight fixed height of image
 		 * @return SpriteBuilder instance
@@ -117,6 +120,7 @@ public abstract static class SpriteBuilder {
 		}		
 		
 		/**
+		 * Sets initial position of Sprite.
 		 * @param initialX initial X position
 		 * @param initialY initial Y position
 		 * @return SpriteBuilder instance
@@ -128,7 +132,8 @@ public abstract static class SpriteBuilder {
 		}
 		
 		/**
-		 * @param initialX initial Y position
+		 * Sets X position of Sprite
+		 * @param initialX initial X position
 		 * @return SpriteBuilder instance
 		 */
 		public SpriteBuilder setX(double initialX) {
@@ -137,6 +142,7 @@ public abstract static class SpriteBuilder {
 		}
 		
 		/**
+		 * Sets Y position of Sprite.
 		 * @param initialY initial Y position
 		 * @return SpriteBuilder instance
 		 */
@@ -169,7 +175,8 @@ public abstract static class SpriteBuilder {
 		public abstract SpriteBuilder load();
 		
 		/**
-		 * @return Built Sprite object
+		 * Builds Sprite object
+		 * @return Sprite object
 		 */
 		public abstract Sprite build();
 		

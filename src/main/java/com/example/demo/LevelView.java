@@ -14,7 +14,7 @@ public class LevelView {
 	
 	/**
 	 * Constructs player's health display
-	 * @param root
+	 * @param root root node of GameScreen
 	 * @param heartsToDisplay player's health
 	 */
 	public LevelView(Group root, int heartsToDisplay) {

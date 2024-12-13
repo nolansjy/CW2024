@@ -11,6 +11,9 @@ public class BossProjectile extends Projectile {
 	private static final int HORIZONTAL_VELOCITY = -15;
 	private static final int INITIAL_X_POSITION = 950;
 
+	/**
+	 * @see ProjectileBuilder
+	 */
 	public BossProjectile(ProjectileBuilder builder) {
 		super(builder);
 	}
@@ -25,6 +28,10 @@ public class BossProjectile extends Projectile {
 		updatePosition();
 	}
 	
+	
+	/**
+	 * @see ProjectileBuilder
+	 */
 	public static class ProjectileBuilder extends Projectile.ProjectileBuilder {
 
 		@Override

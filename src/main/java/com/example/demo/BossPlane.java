@@ -61,9 +61,18 @@ public class BossPlane extends EnemyPlane {
 	}
 	
 	
+	/**
+	 * Builder for BossPlane. Adds shieldProbability and maxShieldFrames
+	 */
 	public static class BossBuilder extends EnemyPlaneBuilder {
 		
+		/**
+		 * Probability of Shield activating
+		 */
 		protected final double shieldProbability;
+		/**
+		 * Maximum frames Shield is active
+		 */
 		protected final int maxShieldFrames;
 
 		/**Compulsory constructor of BossBuilder. Values are controlled by the BossLevel.

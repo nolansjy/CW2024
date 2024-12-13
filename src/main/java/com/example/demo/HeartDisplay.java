@@ -5,7 +5,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 /**
- * Unchanged from original implementation.
+ * Displays player hearts. Unchanged from original implementation.
  */
 public class HeartDisplay {
 	

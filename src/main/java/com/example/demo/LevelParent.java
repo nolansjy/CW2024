@@ -40,6 +40,7 @@ public abstract class LevelParent {
 
 	
 	/**
+	 * Constructs the level. Creates user plane and LevelView
 	 * @param game Initial GameScreen instance
 	 * @throws IOException
 	 */
@@ -60,12 +61,25 @@ public abstract class LevelParent {
 		support = new PropertyChangeSupport(this);
 	}
 
+	/**
+	 * Spawns userPlane
+	 */
 	protected abstract void initializeFriendlyUnits();
 
+	/**
+	 * Checks lose and win condition and next step
+	 */
 	protected abstract void checkIfGameOver();
 
+	/**
+	 * Spawns level enemy units
+	 */
 	protected abstract void spawnEnemyUnits();
 
+	/**
+	 * Creates and adds LevelView elements
+	 * @return Level's LevelView
+	 */
 	protected abstract LevelView instantiateLevelView();
 	
 	/**
@@ -246,6 +260,9 @@ public abstract class LevelParent {
 		}
 	}
 
+	/**
+	 * Updates continuous LevelView elements
+	 */
 	protected void updateLevelView() {
 		levelView.removeHearts(user.getHealth());
 	}

@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- * Holds Win image as ImageView. Unchanged from original implementation.
+ * @deprecated Unnecessary class
  */
 public class WinImage extends ImageView {
 	

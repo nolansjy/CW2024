@@ -33,15 +33,11 @@ public class GameScreen {
 	
 	private static final String DEFAULT_BACKGROUND = "/com/example/demo/images/enemy_bg1.jpg";
 	private static final String BOSS_LEVEL_FILE = "/com/example/demo/data/bossLevel.json";
-	private static final String LEVEL_DATA_FILE = "/com/example/demo/data/enemyLevel.json";
+	private static final String LEVEL_DATA_FILE = "/com/example/demo/data/enemyLevel.json";	
 	
-	private static final int WIN_IMAGE_X_POSITION = 355;
-	private static final int WIN_IMAGE_Y_POSITION = 175;
-	private static final int LOSS_SCREEN_X_POSITION = -160;
-	private static final int LOSS_SCREEN_Y_POSISITION = -375;
 	private final double enemyMaximumYPosition;
-	private final WinImage winImage;
-	private final GameOverImage gameOverImage;
+	private final ImageView winImage;
+	private final ImageView gameOverImage;
 	private LevelParent currentLevel;
 	private int levelStage;
 	private final ObjectMapper mapper;
@@ -63,8 +59,8 @@ public class GameScreen {
 		this.screenWidth = screenWidth;
 		
 		this.enemyMaximumYPosition = screenHeight - SCREEN_HEIGHT_ADJUSTMENT;
-		this.winImage = new WinImage(WIN_IMAGE_X_POSITION, WIN_IMAGE_Y_POSITION);
-		this.gameOverImage = new GameOverImage(LOSS_SCREEN_X_POSITION, LOSS_SCREEN_Y_POSISITION);
+		this.winImage = loadWinImage();
+		this.gameOverImage = loadLoseImage();
 		this.levelStage=1;
 		
 		this.mapper = new ObjectMapper();
@@ -123,7 +119,7 @@ public class GameScreen {
 	protected void winGame() {
 		timeline.stop();
 		root.getChildren().add(winImage);
-		winImage.showWinImage();
+		winImage.setVisible(true);
 	}
 
 	/**
@@ -132,7 +128,7 @@ public class GameScreen {
 	protected void loseGame() {
 		timeline.stop();
 		root.getChildren().add(gameOverImage);
-		gameOverImage.showLoseImage();
+		gameOverImage.setVisible(true);
 	}
 	
 	/**
@@ -150,6 +146,27 @@ public class GameScreen {
 	 */
 	protected JsonNode getBossData() throws IOException {
 		return mapper.readTree(bossLevelFile);		
+	}
+	
+	private ImageView loadWinImage() {
+		ImageView winImage = new ImageView(new Image(getClass().getResourceAsStream("/com/example/demo/images/youwin.png")));
+		winImage.setVisible(false);
+		winImage.setFitHeight(500);
+		winImage.setFitWidth(600);
+		winImage.setLayoutX(355);
+		winImage.setLayoutY(175);		
+		return winImage;
+		
+	}
+	
+	private ImageView loadLoseImage() {
+		ImageView loseImage = new ImageView(new Image(getClass().getResourceAsStream("/com/example/demo/images/gameover.png")));
+		loseImage.setVisible(false);
+		loseImage.setFitHeight(700);
+		loseImage.setFitWidth(600);
+		loseImage.setLayoutX(300);
+		loseImage.setLayoutY(-50);
+		return loseImage;
 	}
 	
 	protected int getLevelStage() {

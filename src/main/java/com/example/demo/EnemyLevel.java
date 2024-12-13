@@ -46,6 +46,7 @@ public class EnemyLevel extends LevelParent {
 		
 
 	/**
+	 * Gets health of EnemyPlane as set in enemyLevel.json configuration
 	 * @return health of each EnemyPlane
 	 */
 	public int getEnemyHealth() {
@@ -54,6 +55,7 @@ public class EnemyLevel extends LevelParent {
 
 
 	/**
+	 * Gets fireRate of EnemyPlane as set in enemyLevel.json configuration
 	 * @return fire rate of each EnemyPlane
 	 */
 	public double getEnemyFireRate() {
@@ -62,6 +64,7 @@ public class EnemyLevel extends LevelParent {
 
 
 	/**
+	 * Gets total EnemyPlanes as set in enemyLevel.json configuration
 	 * @return total enemies spawned at once in a level
 	 */
 	public int getTotalEnemies() {
@@ -70,7 +73,8 @@ public class EnemyLevel extends LevelParent {
 
 
 	/**
-	 * @return kills needed to advance to boss level
+	 * Gets kill target as set in enemyLevel.json configuration
+	 * @return kill target
 	 */
 	public int getKillsToAdvance() {
 		return levelNode.path("killsToAdvance").asInt();
@@ -78,6 +82,7 @@ public class EnemyLevel extends LevelParent {
 
 
 	/**
+	 * Gets enemy spawn rate as set in enemyLevel.json configuration
 	 * @return probability of enemy spawning
 	 */
 	public double getEnemySpawnProbability() {

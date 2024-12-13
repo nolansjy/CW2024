@@ -18,11 +18,28 @@ public class BossLevel extends LevelParent {
 	private BossLevelView levelView;
 	
 	private final JsonNode bossNode;
+	/**
+	 * Health of level's boss
+	 */
 	protected final int bossHealth;
+	/**
+	 * Fire rate of boss
+	 */
 	protected final double bossFireRate;
+	/**
+	 * Probability that shield is activated 
+	 */
 	protected final double bossShieldProbability;
+	/**
+	 * Maximum frames boss Shield is active
+	 */
 	protected final int bossMaxShieldFrames;
 
+	/**
+	 * Reads from bossLevel.json and sets level field configuration, then creates Boss
+	 * @param game GameScreen instance
+	 * @throws IOException While reading from bossLevel.json
+	 */
 	public BossLevel(final GameScreen game) throws IOException {
 		super(game);
 		this.bossNode = game.getBossData().get(game.getLevelStage());
@@ -38,7 +55,8 @@ public class BossLevel extends LevelParent {
 	}
 	
 	/**
-	 * @return boss health as defined in bossLevel.json
+	 * Reads bossLevel.json and gets health set in the current levelStage configuration
+	 * @return boss health by level
 	 */
 	public int getBossHealth() {
 		return bossNode.path("bossHealth").asInt();
@@ -56,21 +74,24 @@ public class BossLevel extends LevelParent {
 	}
 
 	/**
-	 * @return fireRate of BossPlane as defined in bossLevel.json
+	 * Reads bossLevel.json and gets fireRate set in the current levelStage configuration
+	 * @return fireRate of BossPlane
 	 */
 	public double getBossFireRate() {
 		return bossNode.path("fireRate").asDouble();
 	}
 
 	/**
-	 * @return shieldProbability as defined in bossLevel.json
+	 * Reads bossLevel.json and gets shieldProbability set in the current levelStage configuration
+	 * @return shieldProbability
 	 */
 	public double getBossShieldProbability() {
 		return bossNode.path("shieldProbability").asDouble();
 	}
 
 	/**
-	 * @return maxShieldFrames as defined in bossLevel.json
+	 * Reads bossLevel.json and gets maxShieldFrames set in the current levelStage configuration
+	 * @return maxShieldFrames
 	 */
 	public int getBossMaxShieldFrames() {
 		return bossNode.path("maxShieldFrames").asInt();

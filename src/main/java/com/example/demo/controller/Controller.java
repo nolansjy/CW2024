@@ -23,7 +23,7 @@ public class Controller implements PropertyChangeListener {
 
 	/**
 	 * Constructs a GameScreen instance which will be used for the remainder of the program.
-	 * @param stage
+	 * @param stage JavaFX starting stage
 	 */
 	public Controller(Stage stage) {
 		this.stage = stage;

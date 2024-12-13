@@ -44,8 +44,14 @@ public abstract class SpriteDestructible extends Sprite {
 	@Override
 	public abstract void updateActor();
 
+	/**
+	 * Controls how object takes damage. Former Destructible method.
+	 */
 	public abstract void takeDamage();
 
+	/**
+	 * Sets destroyed. Former Destructible method. 
+	 */
 	public void destroy() {
 		setDestroyed(true);
 	}
@@ -59,13 +65,14 @@ public abstract class SpriteDestructible extends Sprite {
 	}
 	
 	/**
-	 * 
+	 * Builder for SpriteDestructible. Adds a hitbox to the existing Sprite.
 	 */
-	public abstract static class SpriteHitboxBuilder extends Sprite.SpriteBuilder {
+	public abstract static class SpriteHitboxBuilder extends SpriteBuilder {
 
 		protected double hitboxHeight;
 				
 		/**
+		 * Sets height of hitbox. The hitbox is a rectangle resized from the center.
 		 * @param hitboxHeight height of hitbox
 		 * @return builder instance
 		 */

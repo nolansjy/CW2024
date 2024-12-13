@@ -5,7 +5,7 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.util.Duration;
 
 /**
- * Parent class for all plane objects.
+ * Parent class for all plane objects. A plane has health, damage taken and damage taken animation.
  */
 public abstract class FighterPlane extends SpriteDestructible {
 
@@ -15,7 +15,7 @@ public abstract class FighterPlane extends SpriteDestructible {
 	private PauseTransition takenDamageAnimation;
 
 	/**
-	 * Constructs the FighterPlane object and sets the animation for taking damage.
+	 * Constructs the FighterPlane object with health, damage taken, and damage taken animation
 	 * @param builder FighterPlaneBuilder instance
 	 */
 	public FighterPlane(FighterPlaneBuilder builder) {
@@ -49,7 +49,7 @@ public abstract class FighterPlane extends SpriteDestructible {
 	}
 	
 	/**
-	 * Sprite image darkens for half a second.
+	 * Plane image darkens for half a second when taking damage.
 	 */
 	private void takeDamageAnimation() {
 		getImage().setEffect(takenDamageEffect);
@@ -82,12 +82,16 @@ public abstract class FighterPlane extends SpriteDestructible {
 		return health;
 	}
 	
+	/**
+	 * Builder adds health and damageTaken to plane
+	 */
 	public abstract static class FighterPlaneBuilder extends SpriteHitboxBuilder {
 
 		protected int health;
 		protected int damageTaken;
 				
 		/**
+		 * Sets health of plane
 		 * @param health health of plane
 		 * @return builder instance
 		 */
@@ -97,6 +101,7 @@ public abstract class FighterPlane extends SpriteDestructible {
 		}
 		
 		/**
+		 * Sets damage taken when hit
 		 * @param damageTaken damage taken when hit
 		 * @return builder instance
 		 */

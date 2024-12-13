@@ -9,6 +9,9 @@ public class EnemyProjectile extends Projectile {
 	private static final int IMAGE_HEIGHT = 50;
 	private static final int HORIZONTAL_VELOCITY = -10;
 
+	/**
+	 * @see ProjectileBuilder
+	 */
 	public EnemyProjectile(ProjectileBuilder builder) {
 		super(builder);
 	}
@@ -23,6 +26,9 @@ public class EnemyProjectile extends Projectile {
 		updatePosition();
 	}
 	
+	/**
+	 * @see ProjectileBuilder
+	 */
 	public static class ProjectileBuilder extends Projectile.ProjectileBuilder {
 
 		@Override

@@ -18,7 +18,7 @@ public class BossLevelView extends LevelView {
 	private final DoubleProperty bossHealth;
 	
 	/**
-	 * The healthbar object is constructed.<b>
+	 * The healthbar object is constructed.
 	 * bossHealth is converted into a SimpleDoubleProperty so the health
 	 * @param root JavaFX root node
 	 * @param heartsToDisplay player's health

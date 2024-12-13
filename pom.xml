@@ -51,7 +51,7 @@
 	    <version>4.0.18</version>
 	    <scope>test</scope>
 	</dependency>
-    <dependency>
+	<dependency>
       <groupId>org.testfx</groupId>
       <artifactId>testfx-junit5</artifactId>
       <version>4.0.18</version>
@@ -70,7 +70,16 @@
           <source>22</source>
           <target>22</target>
         </configuration>
-      </plugin>
+      </plugin> 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.11.2</version>
+        <configuration>
+          <sourcepath>src/main/java</sourcepath>
+          <skip>false</skip>
+        </configuration>
+      </plugin>     
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
