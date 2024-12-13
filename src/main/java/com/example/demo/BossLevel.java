@@ -2,16 +2,19 @@ package com.example.demo;
 
 import java.io.IOException;
 
-import com.example.demo.Boss.BossBuilder;
+import com.example.demo.BossPlane.BossBuilder;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import javafx.scene.Scene;
 
+/**
+ * BossLevel spawns one boss and one player. The levelStage is raised after defeating a boss.
+ */
 public class BossLevel extends LevelParent {
 	
 	private static final String NEXT_LEVEL = "com.example.demo.EnemyLevel";
 	private static final int FINAL_STAGE = 3;
-	private final Boss boss;
+	private final BossPlane boss;
 	private BossLevelView levelView;
 	
 	private final JsonNode bossNode;
@@ -34,33 +37,57 @@ public class BossLevel extends LevelParent {
 		return new BossBuilder(bossHealth, bossFireRate, bossShieldProbability, bossMaxShieldFrames);
 	}
 	
+	/**
+	 * @return boss health as defined in bossLevel.json
+	 */
 	public int getBossHealth() {
 		return bossNode.path("bossHealth").asInt();
 	}
 	
+	/**
+	 * Same as getBossHealth(), but used by instantiateLevelView() first to create the healthbar display.
+	 * It is not reliant on BossLevel being constructed
+	 * @return boss health as defined in bossLevel.json
+	 * @throws IOException
+	 */
 	public int getInitialBossHealth() throws IOException {
 		JsonNode node = game.getBossData().get(game.getLevelStage());
 		return node.path("bossHealth").asInt();
 	}
 
+	/**
+	 * @return fireRate of BossPlane as defined in bossLevel.json
+	 */
 	public double getBossFireRate() {
 		return bossNode.path("fireRate").asDouble();
 	}
 
+	/**
+	 * @return shieldProbability as defined in bossLevel.json
+	 */
 	public double getBossShieldProbability() {
 		return bossNode.path("shieldProbability").asDouble();
 	}
 
+	/**
+	 * @return maxShieldFrames as defined in bossLevel.json
+	 */
 	public int getBossMaxShieldFrames() {
 		return bossNode.path("maxShieldFrames").asInt();
 	}
 
+	/**
+	 * Reads current stage's background from bossLevel.json
+	 */
 	@Override
 	public String getBackgroundFile(int levelStage) throws IOException {
 		JsonNode levelNode = game.getBossData().get(levelStage);
 		return levelNode.path("background").asText();
 	}
 	
+	/**
+	 * Adds boss healthbar to the LevelView
+	 */
 	@Override
 	public Scene initializeScene() {
 		initializeBackground();
@@ -75,6 +102,9 @@ public class BossLevel extends LevelParent {
 		game.getRoot().getChildren().add(getUser());
 	}
 
+	/**
+	 * When boss is defeated, raise stage level. If final stage is reached, wins the game.
+	 */
 	@Override
 	protected void checkIfGameOver() {
 		if (userIsDestroyed()) {
@@ -98,6 +128,9 @@ public class BossLevel extends LevelParent {
 		}
 	}
 
+	/**
+	 *  Adds boss healthbar to levelView
+	 */
 	@Override
 	protected LevelView instantiateLevelView() {
 		int bossHealth = 0;
@@ -111,6 +144,9 @@ public class BossLevel extends LevelParent {
 		return levelView;
 	}
 	
+	/**
+	 * Updates boss healthbar display
+	 */
 	@Override
 	protected void updateLevelView() {
 		levelView.removeHearts(user.getHealth());

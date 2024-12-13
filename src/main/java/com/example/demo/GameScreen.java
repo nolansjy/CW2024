@@ -13,6 +13,12 @@ import java.io.File;
 import java.io.IOException;
 
 
+/**
+ * The GameScreen represents the game instance shared between all levels.<br>
+ * It is responsible for initializing level timelines and provides access to the root/scene node so levels 
+ * can add objects to it. It can start/stop the timeline to show win/lose screens.<br>
+ * It also provides access to the game data JSONs so the files do not have to be read again by each individual level.
+ */
 public class GameScreen {
 	
 	private static final double SCREEN_HEIGHT_ADJUSTMENT = 150;
@@ -41,9 +47,13 @@ public class GameScreen {
 	private final ObjectMapper mapper;
 	private final File enemyLevelFile;
 	private final File bossLevelFile;
-	
 
 
+	/**
+	 * Constructed by the Controller
+	 * @param screenHeight used to create Scene
+	 * @param screenWidth used to create Scene
+	 */
 	public GameScreen(double screenHeight, double screenWidth) {
 		this.root = new Group();
 		this.scene = new Scene(root, screenWidth, screenHeight);
@@ -63,17 +73,27 @@ public class GameScreen {
 	}
 
 	
+	/**
+	 * Sets focus to background and plays the level timeline
+	 */
 	public void startGame() {
 		background.requestFocus();
 		timeline.play();
 	}
 	
+	/**
+	 * Sets the level instance, background and timeline. Is called before startGame().
+	 * @param level Either EnemyLevel or BossLevel class
+	 */
 	public void loadLevel(LevelParent level) {
 		this.currentLevel = level;
 		background = currentLevel.getBackground();
 		initializeTimeline();
 	}
 
+	/**
+	 * Creates new timeline for the current level
+	 */
 	private void initializeTimeline() {
 		timeline = new Timeline();
 		timeline.setCycleCount(Timeline.INDEFINITE);
@@ -81,32 +101,53 @@ public class GameScreen {
 		timeline.getKeyFrames().add(gameLoop);
 	}
 	
+	/**
+	 * Not to be confused with JavaFX's stage, stage refers to levelStage, a number
+	 * @param level levelStage number (starts at 1 by default)
+	 */
 	protected void setStage(int level) {
 		this.levelStage = level;
 	}
 	
+	/**
+	 * Raises levelStage by 1.
+	 */
 	protected void raiseStage() {
 		this.levelStage = levelStage+1;
 	}
 	
 	
+	/**
+	 * Stops level and shows win image
+	 */
 	protected void winGame() {
 		timeline.stop();
 		root.getChildren().add(winImage);
 		winImage.showWinImage();
 	}
 
+	/**
+	 * Stops level and shows lose image
+	 */
 	protected void loseGame() {
 		timeline.stop();
 		root.getChildren().add(gameOverImage);
 		gameOverImage.showLoseImage();
 	}
 	
+	/**
+	 * @return enemyLevel.json file as a Jackson Tree node array
+	 * @throws IOException
+	 */
 	protected JsonNode getLevelData() throws IOException {
 		return mapper.readTree(enemyLevelFile);		
 	}
 	
 	
+	/**
+	 * @return bossLevel.json file as a Jackson Tree node array
+	 * @throws IOException
+	 */
 	protected JsonNode getBossData() throws IOException {
 		return mapper.readTree(bossLevelFile);		
 	}

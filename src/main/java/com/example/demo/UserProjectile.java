@@ -1,5 +1,8 @@
 package com.example.demo;
 
+/**
+ * Projectile fired by UserPlane
+ */
 public class UserProjectile extends Projectile {
 
 	private static final String IMAGE_NAME = "userfire.png";

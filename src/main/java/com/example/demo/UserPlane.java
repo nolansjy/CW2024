@@ -1,6 +1,10 @@
 package com.example.demo;
 
 
+/**
+ * UserPlane is controlled by the player. 
+ * It can move in four directions with four arrow keys and fires projectile with Space.
+ */
 public class UserPlane extends FighterPlane {
 
 	private static final String IMAGE_NAME = "userplane.png";

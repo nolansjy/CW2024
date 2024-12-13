@@ -1,12 +1,18 @@
 package com.example.demo;
 
 
+/**
+ * Parent class of FighterPlane Projectiles
+ */
 public abstract class Projectile extends SpriteDestructible {
 
 	public Projectile(SpriteHitboxBuilder builder) {
 		super(builder);
 	}
 
+	/**
+	 * Destroys projectile upon 'taking damage' e.g. colliding with plane
+	 */
 	@Override
 	public void takeDamage() {
 		this.destroy();

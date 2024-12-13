@@ -6,14 +6,17 @@ import java.util.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class Boss extends EnemyPlane {
+/**
+ * BossPlane spawns during a BossLevel. It can generate a shield which makes it immune to damage. 
+ * The boss will randomly move up and down.
+ */
+public class BossPlane extends EnemyPlane {
 
 	private static final String IMAGE_NAME = "bossplane.png";
 	private static final int IMAGE_HEIGHT = 300;
 	private static final double INITIAL_X_POSITION = 1000.0;
 	private static final double INITIAL_Y_POSITION = 400;
 	private static final double PROJECTILE_Y_POSITION_OFFSET = 75.0;
-	private static final double BOSS_FIRE_RATE = .04;
 	private static final int VERTICAL_VELOCITY = 8;
 	private static final int MOVE_FREQUENCY_PER_CYCLE = 5;
 	private static final int ZERO = 0;
@@ -28,15 +31,24 @@ public class Boss extends EnemyPlane {
 	private int consecutiveMovesInSameDirection;
 	private int indexOfCurrentMove;
 	private int framesWithShieldActivated;
+	
+	private final double bossFireRate;
 	private final int maxShieldFrames;
 	private final double shieldProbability;
 
-	public Boss(BossBuilder builder) {
+	/**
+	 * Creates the shield and initializes values needed for movement
+	 * @param builder builder instance
+	 * @see BossBuilder
+	 */
+	public BossPlane(BossBuilder builder) {
 		super(builder);
-		this.shield = new Circle(INITIAL_X_POSITION, INITIAL_Y_POSITION, builder.imageHeight/2, Color.GOLD);
+		this.shield = new Circle(INITIAL_X_POSITION, INITIAL_Y_POSITION, builder.imageHeight/2, Color.SLATEBLUE);
 		shield.setOpacity(0.5);
 		shield.setVisible(false);
-		this.getChildren().add(shield);				
+		this.getChildren().add(shield);		
+		
+		this.bossFireRate = builder.fireRate;
 		this.shieldProbability = builder.shieldProbability;
 		this.maxShieldFrames = builder.maxShieldFrames;
 		
@@ -48,11 +60,18 @@ public class Boss extends EnemyPlane {
 		initializeMovePattern();
 	}
 	
+	
 	public static class BossBuilder extends EnemyPlaneBuilder {
 		
 		protected final double shieldProbability;
 		protected final int maxShieldFrames;
 
+		/**Compulsory constructor of BossBuilder. Values are controlled by the BossLevel.
+		 * @param health			boss health (base: 100)
+		 * @param fireRate			rate of projectile fire (base: 0.04)
+		 * @param shieldProbability Probability of shield generation (base 0.002)
+		 * @param maxShieldFrames   Maximum frames shield can be activated (base: 500)
+		 */
 		public BossBuilder(int health, double fireRate, double shieldProbability, int maxShieldFrames) {
 			super(health, fireRate);
 			this.shieldProbability = shieldProbability;
@@ -75,8 +94,8 @@ public class Boss extends EnemyPlane {
 		
 		
 		@Override
-		public Boss build() {
-			return new Boss(this);
+		public BossPlane build() {
+			return new BossPlane(this);
 		}
 				
 		
@@ -143,7 +162,7 @@ public class Boss extends EnemyPlane {
 	}
 
 	private boolean bossFiresInCurrentFrame() {
-		return Math.random() < BOSS_FIRE_RATE;
+		return Math.random() < bossFireRate;
 	}
 
 	private double getProjectileInitialPosition() {

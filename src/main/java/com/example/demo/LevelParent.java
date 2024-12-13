@@ -15,6 +15,9 @@ import javafx.scene.image.*;
 import javafx.scene.input.*;
 import javafx.scene.Node;
 
+/**
+ * The LevelParent holds the main game renderer and level design data e.g. level background, enemy health
+ */
 public abstract class LevelParent {
 
 	private static final String IMAGE_LOCATION = "/com/example/demo/images/";
@@ -36,13 +39,16 @@ public abstract class LevelParent {
 	private PropertyChangeSupport support;
 
 	
+	/**
+	 * @param game Initial GameScreen instance
+	 * @throws IOException
+	 */
 	public LevelParent(final GameScreen game) throws IOException {
 		this.game = game;
 		this.root = game.getRoot();		
 		this.scene = game.getScene();
 		this.background = getBackground(getBackgroundFile(game.getLevelStage()));
-		//this.background = new ImageView(new Image(getClass().getResourceAsStream(IMAGE_LOCATION+backgroundImage)));
-		this.playerHealth = 5;
+		this.playerHealth = getLevelPlayerHealth(game.getLevelStage());
 		this.user = new UserPlane.UserPlaneBuilder().setHealth(playerHealth).load().build();
 		this.friendlyUnits = new ArrayList<>();
 		this.enemyUnits = new ArrayList<>();
@@ -62,25 +68,53 @@ public abstract class LevelParent {
 
 	protected abstract LevelView instantiateLevelView();
 	
+	/**
+	 * Gets the background of the level as set by the level (e.g. levelStage=2 returns background for stage 2)
+	 * @param levelStage the current level stage number
+	 * @return background file name as String
+	 * @throws IOException
+	 */
 	protected abstract String getBackgroundFile(int levelStage) throws IOException;
 	
+	/**
+	 * Gets background of level as ImageView
+	 * @param file name of image file as String
+	 * @return level background
+	 */
 	protected ImageView getBackground(String file) {
 		return new ImageView(new Image(getClass().getResourceAsStream(IMAGE_LOCATION+file)));
 	}
 			
+	/**
+	 * Using the below formula, player's health starts at 3 and increases by 1 with each stage
+	 * @param levelStage current level stage number
+	 * @return levelStage+2 as health
+	 */
 	protected int getLevelPlayerHealth(int levelStage) {
 		return 2+levelStage;
 	}
 	
+	/**
+	 * Adds PropertyChangeListener
+	 * @param controller Controller instance
+	 */
 	public void addListener(Controller controller) {
 		support.addPropertyChangeListener(controller);
 	}
 	
+	/**
+	 * Stops timeline and notifies Controller to change level
+	 * @param levelName class name of next level
+	 */
 	public void goToNextLevel(String levelName) {
 		game.getTimeline().stop();
 		support.firePropertyChange("level", this.getClass().getName(), levelName);
 	}
 	
+	/**
+	 * Sets background, user, and user health display. Not changed from original.
+	 * @return Level's Scene node
+	 */
 	public Scene initializeScene() {
 		initializeBackground();
 		initializeFriendlyUnits();
@@ -88,6 +122,9 @@ public abstract class LevelParent {
 		return scene;
 	}
 
+	/**
+	 * Sets level background and user inputs. Arrow keys to move user plane and space to fire projectiles.
+	 */
 	protected void initializeBackground() {
 		background.setFocusTraversable(true);
 		background.setFitHeight(game.getScreenHeight());
@@ -114,6 +151,11 @@ public abstract class LevelParent {
 		root.getChildren().add(background);
 	}
 
+	/**
+	 * The main game renderer. <br>
+	 * Functions unchanged from original, except that handleCollisions() 
+	 * now uses the SpriteDestructible hitbox as bounds instead of the entire image
+	 */
 	protected void updateScene() {
 		spawnEnemyUnits();
 		updateActors();

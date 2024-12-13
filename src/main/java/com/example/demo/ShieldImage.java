@@ -3,6 +3,9 @@ package com.example.demo;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * @deprecated This class is not used as a Circle is used to represent the shield over the boss instead.
+ */
 public class ShieldImage extends ImageView {
 	
 	private static final String IMAGE_NAME = "/com/example/demo/images/shield.png";

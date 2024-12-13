@@ -1,5 +1,8 @@
 package com.example.demo;
 
+/**
+ * The EnemyPlane spawns during EnemyLevel. It only moves horizontally.
+ */
 public class EnemyPlane extends FighterPlane {
 
 	private static final String IMAGE_NAME = "enemyplane.png";
@@ -21,6 +24,10 @@ public class EnemyPlane extends FighterPlane {
 		
 		protected double fireRate;
 		
+		/**EnemyLevel must set the values of the health and fireRate
+		 * @param health   enemy plane health (base: 1)
+		 * @param fireRate enemy fire rate (base: 0.01)
+		 */
 		public EnemyPlaneBuilder(int health, double fireRate) {
 			setHealth(health);
 			this.fireRate = fireRate;

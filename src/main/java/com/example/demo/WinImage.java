@@ -3,6 +3,9 @@ package com.example.demo;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * Holds Win image as ImageView. Unchanged from original implementation.
+ */
 public class WinImage extends ImageView {
 	
 	private static final String IMAGE_NAME = "/com/example/demo/images/youwin.png";

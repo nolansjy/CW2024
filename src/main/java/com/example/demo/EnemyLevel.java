@@ -6,6 +6,9 @@ import com.example.demo.EnemyPlane.EnemyPlaneBuilder;
 import com.fasterxml.jackson.databind.JsonNode;
 
 
+/**
+ * Enemy Level stage where enemies spawn and a kill target needs to be reached before facing BossLevel
+ */
 public class EnemyLevel extends LevelParent {
 	
 	private static final String NEXT_LEVEL = "com.example.demo.BossLevel";
@@ -17,6 +20,11 @@ public class EnemyLevel extends LevelParent {
 	private final int killsToAdvance;
 	private final double enemySpawnProbability;
 
+	/**
+	 * Runs getters which read from the enemyLevel.json file to set the enemy details of this level
+	 * @param game initial GameScreen instance
+	 * @throws IOException
+	 */
 	public EnemyLevel(final GameScreen game) throws IOException {
 		super(game);
 		this.levelNode = game.getLevelData().get(game.getLevelStage());
@@ -27,6 +35,9 @@ public class EnemyLevel extends LevelParent {
 		this.enemySpawnProbability = getEnemySpawnProbability();
 	}
 	
+	/**
+	 * Reads background from enemyLevel.json
+	 */
 	@Override
 	protected String getBackgroundFile(int levelStage) throws IOException {
 		JsonNode levelNode = game.getLevelData().get(levelStage);
@@ -34,26 +45,41 @@ public class EnemyLevel extends LevelParent {
 	}
 		
 
+	/**
+	 * @return health of each EnemyPlane
+	 */
 	public int getEnemyHealth() {
 		return levelNode.path("enemyHealth").asInt();
 	}
 
 
+	/**
+	 * @return fire rate of each EnemyPlane
+	 */
 	public double getEnemyFireRate() {
 		return levelNode.path("fireRate").asDouble();
 	}
 
 
+	/**
+	 * @return total enemies spawned at once in a level
+	 */
 	public int getTotalEnemies() {
 		return levelNode.path("totalEnemies").asInt();
 	}
 
 
+	/**
+	 * @return kills needed to advance to boss level
+	 */
 	public int getKillsToAdvance() {
 		return levelNode.path("killsToAdvance").asInt();
 	}
 
 
+	/**
+	 * @return probability of enemy spawning
+	 */
 	public double getEnemySpawnProbability() {
 		return levelNode.path("spawnRate").asDouble();
 
@@ -75,6 +101,9 @@ public class EnemyLevel extends LevelParent {
 		game.getRoot().getChildren().add(getUser());
 	}
 
+	/**
+	 * Changed to use the new SpriteDestructible builder to create the EnemyPlane object
+	 */
 	@Override
 	protected void spawnEnemyUnits() {
 		int currentNumberOfEnemies = getCurrentNumberOfEnemies();
