@@ -9,9 +9,14 @@ public class GameOverImage extends ImageView {
 
 	public GameOverImage(double xPosition, double yPosition) {
 		setImage(new Image(getClass().getResource(IMAGE_NAME).toExternalForm()) );
+		this.setVisible(false);
 //		setImage(ImageSetUp.getImageList().get(ImageSetUp.getGameOver()));
 		setLayoutX(xPosition);
 		setLayoutY(yPosition);
+	}
+	
+	public void showLoseImage() {
+		this.setVisible(true);
 	}
 
 }

@@ -17,6 +17,7 @@ public abstract class SpriteDestructible extends Sprite implements Destructible 
 		this.hitbox = new Rectangle(builder.initialX, builder.initialY, hitboxWidth, hitboxHeight);
 		this.getChildren().add(hitbox);
 		hitbox.toBack();
+		hitbox.setVisible(false);
 		isDestroyed = false;
 	}
 

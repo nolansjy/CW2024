@@ -9,8 +9,9 @@ public class UserPlane extends FighterPlane {
 	private static final double INITIAL_X_POSITION = 5.0;
 	private static final double INITIAL_Y_POSITION = 300.0;
 	private static final int IMAGE_HEIGHT = 150;
-	private static final int VERTICAL_VELOCITY = 8;
-	private static final int PROJECTILE_X_POSITION = 110;
+	private static final int VERTICAL_VELOCITY = 10;
+	private static final int HORIZONTAL_VELOCITY = 10;
+	private static final int PROJECTILE_X_POSITION_OFFSET = 110;
 	private static final int PROJECTILE_Y_POSITION_OFFSET = 20;
 	private int velocityMultiplier;
 	private int numberOfKills;
@@ -68,7 +69,7 @@ public class UserPlane extends FighterPlane {
 	
 	private void moveX() {
 		double initialTranslateX = getTranslateX();
-		this.moveHorizontally(VERTICAL_VELOCITY * velocityMultiplier);
+		this.moveHorizontally(HORIZONTAL_VELOCITY * velocityMultiplier);
 		double newPosition = getLayoutX() + getTranslateX();
 		if (newPosition > 1000 || newPosition < 5) { //TODO: Constant bounds
 			this.setTranslateX(initialTranslateX);
@@ -82,8 +83,10 @@ public class UserPlane extends FighterPlane {
 	
 	@Override
 	public SpriteDestructible fireProjectile() {
+		
 		return new UserProjectile.ProjectileBuilder()
-				.setImagePos(PROJECTILE_X_POSITION, getProjectileYPosition(PROJECTILE_Y_POSITION_OFFSET))
+				.setImagePos(getProjectileXPosition(PROJECTILE_X_POSITION_OFFSET), 
+						     getProjectileYPosition(PROJECTILE_Y_POSITION_OFFSET))
 				.load().build();
 	}
 
