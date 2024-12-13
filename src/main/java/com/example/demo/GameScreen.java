@@ -26,7 +26,6 @@ public class GameScreen {
 	private ImageView background;
 	
 	private static final String DEFAULT_BACKGROUND = "/com/example/demo/images/enemy_bg1.jpg";
-	private static final String USER_DATA_FILE = "/com/example/demo/data/userData.json";
 	private static final String BOSS_LEVEL_FILE = "/com/example/demo/data/bossLevel.json";
 	private static final String LEVEL_DATA_FILE = "/com/example/demo/data/enemyLevel.json";
 	

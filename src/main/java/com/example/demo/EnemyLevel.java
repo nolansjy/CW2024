@@ -3,18 +3,12 @@ package com.example.demo;
 import java.io.IOException;
 
 import com.example.demo.EnemyPlane.EnemyPlaneBuilder;
-import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import javafx.scene.image.ImageView;
 
 public class EnemyLevel extends LevelParent {
 	
-	private static final String BACKGROUND_IMAGE_NAME = "enemy_bg1.jpg";
 	private static final String NEXT_LEVEL = "com.example.demo.BossLevel";
-	private static final int TOTAL_ENEMIES = 5;
-	private static final int KILLS_TO_ADVANCE = 10;
-	private static final double ENEMY_SPAWN_PROBABILITY = .20;
 
 	private final JsonNode levelNode;
 	private final int enemyHealth;

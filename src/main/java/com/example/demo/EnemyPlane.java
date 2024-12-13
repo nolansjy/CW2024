@@ -7,7 +7,6 @@ public class EnemyPlane extends FighterPlane {
 	private static final int HORIZONTAL_VELOCITY = -6;
 	private static final double PROJECTILE_X_POSITION_OFFSET = -100.0;
 	private static final double PROJECTILE_Y_POSITION_OFFSET = 50.0;
-	private static final int ENEMY_BASE_HEALTH = 1;
 	private static final int ENEMY_BASE_DAMAGE_TAKEN = 1;
 
 	

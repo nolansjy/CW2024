@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 
 public class BossLevel extends LevelParent {
 	
-	private static final String BACKGROUND_IMAGE_NAME = "boss_bg1.jpg";
 	private static final String NEXT_LEVEL = "com.example.demo.EnemyLevel";
 	private static final int FINAL_STAGE = 3;
 	private final Boss boss;

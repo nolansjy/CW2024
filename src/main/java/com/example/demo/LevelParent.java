@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.example.demo.controller.Controller;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
@@ -19,7 +18,6 @@ import javafx.scene.Node;
 public abstract class LevelParent {
 
 	private static final String IMAGE_LOCATION = "/com/example/demo/images/";
-	private static final String DATA_LOCATION = "/com/example/demo/data/";
 	private final Group root;
 	protected final Scene scene;
 	private final ImageView background;
