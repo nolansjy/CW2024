@@ -28,7 +28,8 @@ public class UserProjectile extends Projectile {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Builder for UserProjectile
+	 * @see ProjectileBuilder
 	 */
 	public static class ProjectileBuilder extends Projectile.ProjectileBuilder {
 

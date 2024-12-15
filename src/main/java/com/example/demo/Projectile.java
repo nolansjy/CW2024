@@ -6,6 +6,11 @@ package com.example.demo;
  */
 public abstract class Projectile extends SpriteDestructible {
 
+	/**
+	 * Projectile builder
+	 * @param builder SpriteHitboxBuilder
+	 * @see SpriteHitboxBuilder
+	 */
 	public Projectile(SpriteHitboxBuilder builder) {
 		super(builder);
 	}
