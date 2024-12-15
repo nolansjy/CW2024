@@ -7,10 +7,10 @@ public class EnemyProjectile extends Projectile {
 	
 	private static final String IMAGE_NAME = "enemyfire.png";
 	private static final int IMAGE_HEIGHT = 50;
-	private static final int HORIZONTAL_VELOCITY = -10;
+	private static final int HORIZONTAL_VELOCITY = -8;
 
 	/**
-	 * @see ProjectileBuilder
+	 * {@inheritDoc}
 	 */
 	public EnemyProjectile(ProjectileBuilder builder) {
 		super(builder);
@@ -27,7 +27,7 @@ public class EnemyProjectile extends Projectile {
 	}
 	
 	/**
-	 * @see ProjectileBuilder
+	 * {@inheritDoc}
 	 */
 	public static class ProjectileBuilder extends Projectile.ProjectileBuilder {
 

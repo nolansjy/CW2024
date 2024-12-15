@@ -25,13 +25,13 @@ public class BossPlane extends EnemyPlane {
 	private static final int Y_POSITION_LOWER_BOUND = 475;
 	private static final int DAMAGE_TAKEN = 5;
 	
-	private final Circle shield;
 	private final List<Integer> movePattern;
 	private boolean isShielded;
 	private int consecutiveMovesInSameDirection;
 	private int indexOfCurrentMove;
 	private int framesWithShieldActivated;
 	
+	private final Circle shield;	
 	private final double bossFireRate;
 	private final int maxShieldFrames;
 	private final double shieldProbability;
@@ -96,7 +96,7 @@ public class BossPlane extends EnemyPlane {
 		@Override
 		public BossBuilder load() {
 			setImageView(IMAGE_NAME, IMAGE_HEIGHT, INITIAL_X_POSITION, INITIAL_Y_POSITION);
-			setHitboxHeight(IMAGE_HEIGHT/3);
+			setHitboxHeight(IMAGE_HEIGHT/4);
 			setDamageTaken(DAMAGE_TAKEN);
 			return this;
 		}
