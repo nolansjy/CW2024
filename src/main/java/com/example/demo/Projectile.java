@@ -21,6 +21,9 @@ public abstract class Projectile extends SpriteDestructible {
 	@Override
 	public abstract void updatePosition();
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public static abstract class ProjectileBuilder extends SpriteDestructible.SpriteHitboxBuilder {
 
 		@Override

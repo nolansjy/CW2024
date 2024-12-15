@@ -10,6 +10,7 @@ public class LevelView {
 	private static final double HEART_DISPLAY_X_POSITION = 5;
 	private static final double HEART_DISPLAY_Y_POSITION = 25;
 	private final Group root;
+	
 	private final HeartDisplay heartDisplay;
 	
 	/**
@@ -22,15 +23,24 @@ public class LevelView {
 		this.heartDisplay = new HeartDisplay(HEART_DISPLAY_X_POSITION, HEART_DISPLAY_Y_POSITION, heartsToDisplay);
 	}
 	
+	/**
+	 * Shows heart display of player
+	 */
 	public void showHeartDisplay() {
 		root.getChildren().add(heartDisplay.getContainer());
 	}
 	
+	/**
+	 * Removes hearts as health decreases
+	 * @param heartsRemaining current player health
+	 */
 	public void removeHearts(int heartsRemaining) {
 		int currentNumberOfHearts = heartDisplay.getContainer().getChildren().size();
 		for (int i = 0; i < currentNumberOfHearts - heartsRemaining; i++) {
 			heartDisplay.removeHeart();
 		}
 	}
+	
+	
 
 }

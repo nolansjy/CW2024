@@ -87,7 +87,13 @@ public abstract class FighterPlane extends SpriteDestructible {
 	 */
 	public abstract static class FighterPlaneBuilder extends SpriteHitboxBuilder {
 
+		/**
+		 * health of plane
+		 */
 		protected int health;
+		/**
+		 * damage taken by plane when hit
+		 */
 		protected int damageTaken;
 				
 		/**

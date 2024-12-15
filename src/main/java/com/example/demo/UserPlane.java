@@ -8,6 +8,8 @@ package com.example.demo;
 public class UserPlane extends FighterPlane {
 
 	private static final String IMAGE_NAME = "userplane.png";
+	private static final double X_UPPER_BOUND = 1000.0;
+	private static final double X_LOWER_BOUND = 5.0;
 	private static final double Y_UPPER_BOUND = -40;
 	private static final double Y_LOWER_BOUND = 600.0;
 	private static final double INITIAL_X_POSITION = 5.0;
@@ -21,12 +23,19 @@ public class UserPlane extends FighterPlane {
 	private int numberOfKills;
 	private int movementAxis;
 
+	/**
+	 * Constructs a UserPlane
+	 * @param builder UserPlaneBuilder instance
+	 */
 	public UserPlane(UserPlaneBuilder builder) {
 		super(builder);
 		velocityMultiplier = 0;
 		movementAxis = 0;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public static class UserPlaneBuilder extends FighterPlaneBuilder {
 
 		@Override 
@@ -51,6 +60,9 @@ public class UserPlane extends FighterPlane {
 		
 	}
 	
+	/**
+	 * Moves plane position based on user's movement controls
+	 */
 	@Override
 	public void updatePosition() {
 		if (isMoving()) {			
@@ -75,7 +87,7 @@ public class UserPlane extends FighterPlane {
 		double initialTranslateX = getTranslateX();
 		this.moveHorizontally(HORIZONTAL_VELOCITY * velocityMultiplier);
 		double newPosition = getLayoutX() + getTranslateX();
-		if (newPosition > 1000 || newPosition < 5) { //TODO: Constant bounds
+		if (newPosition > X_UPPER_BOUND || newPosition < X_LOWER_BOUND) {
 			this.setTranslateX(initialTranslateX);
 		}
 	}
@@ -98,10 +110,15 @@ public class UserPlane extends FighterPlane {
 		return velocityMultiplier != 0;
 	}
 	
+	/**
+	 * Y movement is represented by -1 and X movement is represented by +1.<br>
+	 * movementAxis and velocityMultiplier can be represented as a XOR table using +1/-1
+	 */
 	private boolean movingByY() {
 		return (movementAxis*velocityMultiplier) < 0;
 	}
 	
+
 
 	public void moveUp() {
 		movementAxis = 1;

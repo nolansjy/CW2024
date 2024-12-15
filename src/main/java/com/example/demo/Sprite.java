@@ -86,9 +86,21 @@ public abstract class Sprite extends StackPane {
  */
 public abstract static class SpriteBuilder {
 		
+		/**
+		 * file name of image
+		 */
 		protected String imageName;		
+		/**
+		 * height used to resize image
+		 */
 		protected double imageHeight;
+		/**
+		 * X position of Sprite
+		 */
 		protected double initialX;
+		/**
+		 * Y position of Sprite
+		 */
 		protected double initialY;
 		
 		/**

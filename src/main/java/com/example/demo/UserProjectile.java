@@ -9,6 +9,9 @@ public class UserProjectile extends Projectile {
 	private static final int IMAGE_HEIGHT = 50;
 	private static final int HORIZONTAL_VELOCITY = 20;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public UserProjectile(ProjectileBuilder builder) {
 		super(builder);
 	}
@@ -23,6 +26,9 @@ public class UserProjectile extends Projectile {
 		updatePosition();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	public static class ProjectileBuilder extends Projectile.ProjectileBuilder {
 
 		@Override

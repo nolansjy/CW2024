@@ -69,6 +69,9 @@ public abstract class SpriteDestructible extends Sprite {
 	 */
 	public abstract static class SpriteHitboxBuilder extends SpriteBuilder {
 
+		/**
+		 * Used to resize height of hitbox Rectangle from center
+		 */
 		protected double hitboxHeight;
 				
 		/**
