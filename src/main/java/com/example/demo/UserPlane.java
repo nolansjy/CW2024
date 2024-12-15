@@ -34,7 +34,8 @@ public class UserPlane extends FighterPlane {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Builder for UserPlane
+	 * @see FighterPlaneBuilder
 	 */
 	public static class UserPlaneBuilder extends FighterPlaneBuilder {
 
@@ -119,27 +120,41 @@ public class UserPlane extends FighterPlane {
 	}
 	
 
-
+	/**
+	 * Moves user vertically up.
+	 */
 	public void moveUp() {
 		movementAxis = 1;
 		velocityMultiplier = -1;
 	}
 
+	/**
+	 * Moves user vertically down
+	 */
 	public void moveDown() {
 		movementAxis = -1;
 		velocityMultiplier = 1;
 	}
 	
+	/**
+	 * Moves user horizontally right
+	 */
 	public void moveFront() {
 		movementAxis = 1;
 		velocityMultiplier = 1;
 	}
 	
+	/**
+	 * Moves user horizontally left
+	 */
 	public void moveBack() {
 		movementAxis = -1;
 		velocityMultiplier = -1;
 	}
 
+	/**
+	 * User stops moving.
+	 */
 	public void stop() {
 		velocityMultiplier = 0;
 	}

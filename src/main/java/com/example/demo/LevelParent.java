@@ -40,9 +40,18 @@ public abstract class LevelParent {
 	
 	private int currentNumberOfEnemies;
 	private LevelView levelView;
+	/**
+	 * GameScreen instance shared by levels
+	 */
 	protected GameScreen game;
+	/**
+	 * Player health for this level (not fully implemented)
+	 */
 	protected int playerHealth;	
 	private PropertyChangeSupport support;
+	/**
+	 * Stage type of this level
+	 */
 	protected int stageType;
 
 	
@@ -100,7 +109,9 @@ public abstract class LevelParent {
 	
 	/**
 	 * Get alert of a level from level file
+	 * @param stageType the current stage type
 	 * @return level alert as String
+	 * @throws IOException
 	 */
 	protected abstract String getLevelAlert(int stageType) throws IOException;
 

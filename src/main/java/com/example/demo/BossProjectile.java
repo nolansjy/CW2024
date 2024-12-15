@@ -12,7 +12,8 @@ public class BossProjectile extends Projectile {
 	private static final int INITIAL_X_POSITION = 950;
 
 	/**
-	 * {@inheritDoc}
+	 * Builds BossProjectile
+	 * @see ProjectileBuilder
 	 */
 	public BossProjectile(ProjectileBuilder builder) {
 		super(builder);
@@ -30,7 +31,8 @@ public class BossProjectile extends Projectile {
 	
 	
 	/**
-	 * {@inheritDoc}
+	 * Builder for BossProjectile
+	 * @see ProjectileBuilder
 	 */
 	public static class ProjectileBuilder extends Projectile.ProjectileBuilder {
 

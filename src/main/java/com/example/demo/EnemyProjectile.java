@@ -2,6 +2,7 @@ package com.example.demo;
 
 /**
  * Projectile fired by EnemyPlane
+ * @see Projectile
  */
 public class EnemyProjectile extends Projectile {
 	
@@ -10,7 +11,8 @@ public class EnemyProjectile extends Projectile {
 	private static final int HORIZONTAL_VELOCITY = -8;
 
 	/**
-	 * {@inheritDoc}
+	 * Constructor for EnemyProjectile.
+	 * @see ProjectileBuilder
 	 */
 	public EnemyProjectile(ProjectileBuilder builder) {
 		super(builder);
@@ -27,7 +29,8 @@ public class EnemyProjectile extends Projectile {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Builder for EnemyProjectile.
+	 * @see ProjectileBuilder
 	 */
 	public static class ProjectileBuilder extends Projectile.ProjectileBuilder {
 

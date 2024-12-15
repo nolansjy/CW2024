@@ -10,7 +10,8 @@ public class UserProjectile extends Projectile {
 	private static final int HORIZONTAL_VELOCITY = 20;
 
 	/**
-	 * {@inheritDoc}
+	 * Constructor for UserProjectile.
+	 * @see ProjectileBuilder
 	 */
 	public UserProjectile(ProjectileBuilder builder) {
 		super(builder);

@@ -65,7 +65,7 @@ public class GameScreen {
 		this.bossLevelFile = new File(getClass().getResource(BOSS_LEVEL_FILE).getPath());
 		
 		this.removeAlert = new PauseTransition(Duration.seconds(2));
-		this.stageType = 3;
+		this.stageType = 1;
 		this.difficulty = 0;
 	}
 
@@ -99,18 +99,24 @@ public class GameScreen {
 	}
 	
 	
+	/**
+	 * Raises difficulty of levels by 1
+	 */
 	protected void raiseDifficulty() {
 		this.difficulty = difficulty+1;
 	}
 	
 	/**
-	 * Sets type of stage for all levels (Currently 1-3, 0 for testing)
-	 * @param stageType 
+	 * Sets type of stage for all levels (Currently Stage 1-3, Stage 0 for testing)
+	 * @param stageType level's stage type
 	 */
 	protected void setStageType(int stageType) {
 		this.stageType = stageType;
 	}
 	
+	/**
+	 * Goes to the next stage type by incrementing 1.
+	 */
 	protected void nextStageType() {
 		this.stageType = stageType+1;
 	}
@@ -153,11 +159,19 @@ public class GameScreen {
 	
 	
 	
+	/**
+	 * Difficulty of current round
+	 * @return difficulty
+	 */
 	public int getDifficulty() {
 		return difficulty;
 	}
 		
 	
+	/**
+	 * Stage type for current level
+	 * @return current level's stage type
+	 */
 	protected int getStageType() {
 		return stageType;
 	}
