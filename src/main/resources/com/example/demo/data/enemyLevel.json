@@ -1,5 +1,6 @@
 [
   {
+	"alert": "Test Stage",
     "background": "enemy_bg1.jpg",
     "enemyHealth": 1,
     "fireRate": 0.01,
@@ -8,27 +9,30 @@
     "spawnRate": 0.2
   },
   {
+	"alert": "Clear Skies",
     "background": "enemy_bg1.jpg",
     "enemyHealth": 1,
     "fireRate": 0.01,
-    "totalEnemies": 3,
-    "killsToAdvance": 5,
+    "totalEnemies": 4,
+    "killsToAdvance": 6,
     "spawnRate": 0.1
   },
   {
+	"alert": "High Noon",
     "background": "enemy_bg2.jpg",
+    "enemyHealth": 2,
+    "fireRate": 0.01,
+    "totalEnemies": 4,
+    "killsToAdvance": 4,
+    "spawnRate": 0.15
+  },
+  {
+	"alert": "Pacific Storm",
+    "background": "enemy_bg3.jpg",
     "enemyHealth": 1,
     "fireRate": 0.02,
     "totalEnemies": 4,
     "killsToAdvance": 6,
-    "spawnRate": 0.15
-  },
-  {
-    "background": "enemy_bg3.jpg",
-    "enemyHealth": 1,
-    "fireRate": 0.02,
-    "totalEnemies": 5,
-    "killsToAdvance": 8,
     "spawnRate": 0.2
   }
 ]

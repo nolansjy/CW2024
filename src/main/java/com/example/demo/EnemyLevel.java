@@ -14,6 +14,8 @@ public class EnemyLevel extends LevelParent {
 	private static final String NEXT_LEVEL = "com.example.demo.BossLevel";
 
 	private final JsonNode levelNode;
+	private final int difficulty;
+	
 	private final int enemyHealth;
 	private final double enemyFireRate;
 	private final int totalEnemies;
@@ -27,7 +29,8 @@ public class EnemyLevel extends LevelParent {
 	 */
 	public EnemyLevel(final GameScreen game) throws IOException {
 		super(game);
-		this.levelNode = game.getLevelData().get(game.getLevelStage());
+		this.levelNode = game.getLevelData().get(game.getStageType());
+		this.difficulty = game.getDifficulty();
 		this.enemyHealth = getEnemyHealth();
 		this.enemyFireRate = getEnemyFireRate();
 		this.totalEnemies = getTotalEnemies();
@@ -39,9 +42,15 @@ public class EnemyLevel extends LevelParent {
 	 * Reads background from enemyLevel.json
 	 */
 	@Override
-	protected String getBackgroundFile(int levelStage) throws IOException {
-		JsonNode levelNode = game.getLevelData().get(levelStage);
+	protected String getBackgroundFile(int stageType) throws IOException {
+		JsonNode levelNode = game.getLevelData().get(stageType);
 		return levelNode.path("background").asText();
+	}
+	
+	@Override
+	protected String getLevelAlert(int stageType) throws IOException {
+		JsonNode levelNode = game.getLevelData().get(stageType);
+		return levelNode.path("alert").asText();
 	}
 		
 
@@ -49,8 +58,9 @@ public class EnemyLevel extends LevelParent {
 	 * Gets health of EnemyPlane as set in enemyLevel.json configuration
 	 * @return health of each EnemyPlane
 	 */
-	public int getEnemyHealth() {
-		return levelNode.path("enemyHealth").asInt();
+	public int getEnemyHealth() {	
+		int health = levelNode.path("enemyHealth").asInt();
+		return health + difficulty;
 	}
 
 
@@ -59,7 +69,8 @@ public class EnemyLevel extends LevelParent {
 	 * @return fire rate of each EnemyPlane
 	 */
 	public double getEnemyFireRate() {
-		return levelNode.path("fireRate").asDouble();
+		double fireRate = levelNode.path("fireRate").asDouble();
+		return fireRate + 0.005*difficulty;
 	}
 
 
@@ -68,7 +79,8 @@ public class EnemyLevel extends LevelParent {
 	 * @return total enemies spawned at once in a level
 	 */
 	public int getTotalEnemies() {
-		return levelNode.path("totalEnemies").asInt();
+		int enemyTotal = levelNode.path("totalEnemies").asInt();
+		return enemyTotal + difficulty;
 	}
 
 
@@ -77,7 +89,8 @@ public class EnemyLevel extends LevelParent {
 	 * @return kill target
 	 */
 	public int getKillsToAdvance() {
-		return levelNode.path("killsToAdvance").asInt();
+		int killsToAdvance = levelNode.path("killsToAdvance").asInt();
+		return killsToAdvance + difficulty;
 	}
 
 
@@ -86,7 +99,8 @@ public class EnemyLevel extends LevelParent {
 	 * @return probability of enemy spawning
 	 */
 	public double getEnemySpawnProbability() {
-		return levelNode.path("spawnRate").asDouble();
+		double spawnRate =  levelNode.path("spawnRate").asDouble();
+		return spawnRate + 0.05*difficulty;
 
 	}
 
@@ -136,11 +150,5 @@ public class EnemyLevel extends LevelParent {
 		return getUser().getNumberOfKills() >= killsToAdvance;
 	}
 
-
-
-
-
-
-	
 
 }

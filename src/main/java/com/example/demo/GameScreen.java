@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.animation.*;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.*;
 import javafx.util.Duration;
 
@@ -24,25 +25,25 @@ public class GameScreen {
 	private static final double SCREEN_HEIGHT_ADJUSTMENT = 150;
 	private static final int MILLISECOND_DELAY = 50;
 	private final double screenHeight;
-	private final double screenWidth;
-	
+	private final double screenWidth;	
 	private final Group root;
 	private Timeline timeline;
 	private final Scene scene;	
 	private ImageView background;
+	private final double enemyMaximumYPosition;
 	
 	private static final String DEFAULT_BACKGROUND = "/com/example/demo/images/enemy_bg1.jpg";
 	private static final String BOSS_LEVEL_FILE = "/com/example/demo/data/bossLevel.json";
 	private static final String LEVEL_DATA_FILE = "/com/example/demo/data/enemyLevel.json";	
-	
-	private final double enemyMaximumYPosition;
-	private final ImageView winImage;
-	private final ImageView gameOverImage;
-	private LevelParent currentLevel;
-	private int levelStage;
+	private static final String UI_STYLE_FILE = "/com/example/demo/styles/gameUI.css";	
 	private final ObjectMapper mapper;
 	private final File enemyLevelFile;
-	private final File bossLevelFile;
+	private final File bossLevelFile;	
+	private final PauseTransition removeAlert;
+	private Label alert;
+	private LevelParent currentLevel;	
+	private int stageType;
+	private int difficulty;
 
 
 	/**
@@ -53,19 +54,19 @@ public class GameScreen {
 	public GameScreen(double screenHeight, double screenWidth) {
 		this.root = new Group();
 		this.scene = new Scene(root, screenWidth, screenHeight);
+		scene.getStylesheets().add(getClass().getResource(UI_STYLE_FILE).toExternalForm());
 		this.timeline = new Timeline();
 		this.background = new ImageView(new Image(getClass().getResourceAsStream(DEFAULT_BACKGROUND)));
 		this.screenHeight = screenHeight;
-		this.screenWidth = screenWidth;
-		
-		this.enemyMaximumYPosition = screenHeight - SCREEN_HEIGHT_ADJUSTMENT;
-		this.winImage = loadWinImage();
-		this.gameOverImage = loadLoseImage();
-		this.levelStage=1;
-		
+		this.screenWidth = screenWidth;		
+		this.enemyMaximumYPosition = screenHeight - SCREEN_HEIGHT_ADJUSTMENT;		
 		this.mapper = new ObjectMapper();
 		this.enemyLevelFile = new File(getClass().getResource(LEVEL_DATA_FILE).getPath());
 		this.bossLevelFile = new File(getClass().getResource(BOSS_LEVEL_FILE).getPath());
+		
+		this.removeAlert = new PauseTransition(Duration.seconds(2));
+		this.stageType = 3;
+		this.difficulty = 0;
 	}
 
 	
@@ -97,42 +98,73 @@ public class GameScreen {
 		timeline.getKeyFrames().add(gameLoop);
 	}
 	
-	/**
-	 * Not to be confused with JavaFX's stage, stage refers to levelStage, a number
-	 * @param level levelStage number (starts at 1 by default)
-	 */
-	protected void setStage(int level) {
-		this.levelStage = level;
+	
+	protected void raiseDifficulty() {
+		this.difficulty = difficulty+1;
 	}
 	
 	/**
-	 * Raises levelStage by 1.
+	 * Sets type of stage for all levels (Currently 1-3, 0 for testing)
+	 * @param stageType 
 	 */
-	protected void raiseStage() {
-		this.levelStage = levelStage+1;
+	protected void setStageType(int stageType) {
+		this.stageType = stageType;
 	}
 	
+	protected void nextStageType() {
+		this.stageType = stageType+1;
+	}
+	
+	/**
+	 * Displays a message on game screen
+	 * @param text message content
+	 */
+	protected void addAlert(String text) {
+		alert = new Label(text);
+		alert.getStyleClass().add("alert");
+		alert.setLayoutX(550);
+		alert.setLayoutY(60);
+		root.getChildren().add(alert);
+		removeAlert.setOnFinished(e -> root.getChildren().remove(alert));
+		removeAlert.play();
+	}
 	
 	/**
 	 * Stops level and shows win image
 	 */
 	protected void winGame() {
 		timeline.stop();
+		ImageView winImage = loadWinImage();
 		root.getChildren().add(winImage);
 		winImage.setVisible(true);
 	}
+	
+	
 
 	/**
 	 * Stops level and shows lose image
 	 */
 	protected void loseGame() {
 		timeline.stop();
+		ImageView gameOverImage = loadLoseImage();
 		root.getChildren().add(gameOverImage);
 		gameOverImage.setVisible(true);
-	}
+	}		
 	
+	
+	
+	public int getDifficulty() {
+		return difficulty;
+	}
+		
+	
+	protected int getStageType() {
+		return stageType;
+	}
+		
 	/**
-	 * @return enemyLevel.json file as a Jackson Tree node array
+	 * LevelData is the contents of enemyLevel.json
+	 * @return returns JSON as Jackson Tree node array
 	 * @throws IOException
 	 */
 	protected JsonNode getLevelData() throws IOException {
@@ -141,13 +173,14 @@ public class GameScreen {
 	
 	
 	/**
-	 * @return bossLevel.json file as a Jackson Tree node array
+	 * BossData() is the contents of bossLevel.json
+	 * @return returns JSON as Jackson Tree node array
 	 * @throws IOException
 	 */
 	protected JsonNode getBossData() throws IOException {
 		return mapper.readTree(bossLevelFile);		
 	}
-	
+		
 	private ImageView loadWinImage() {
 		ImageView winImage = new ImageView(new Image(getClass().getResourceAsStream("/com/example/demo/images/youwin.png")));
 		winImage.setVisible(false);
@@ -169,26 +202,43 @@ public class GameScreen {
 		return loseImage;
 	}
 	
-	protected int getLevelStage() {
-		return levelStage;
-	}
 	
+	/**
+	 * Returns JavaFX Group root node
+	 * @return root node 
+	 */
 	protected Group getRoot() {
 		return root;
 	}
 	
+	/**
+	 * Timeline is used to start/stop levels
+	 * @return Timeline
+	 */
 	protected Timeline getTimeline() {
 		return timeline;
 	}
 	
+	/**
+	 * Game instance's Scene node
+	 * @return Scene
+	 */
 	protected Scene getScene() {
 		return scene;
 	}
 
+	/**
+	 * Maximum height an enemy can spawn
+	 * @return enemyMaximumYPosition
+	 */
 	protected double getEnemyMaximumYPosition() {
 		return enemyMaximumYPosition;
 	}
 
+	/**
+	 * Height of screen
+	 * @return screenHeight
+	 */
 	protected double getScreenHeight() {
 		return screenHeight;
 	}
@@ -196,5 +246,8 @@ public class GameScreen {
 	protected double getScreenWidth() {
 		return screenWidth;
 	}
+
+
+
 
 }

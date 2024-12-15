@@ -13,9 +13,16 @@ public class BossLevelView extends LevelView {
 
 	private static final int HEALTHBAR_WIDTH = 400;
 	private final Group root;
-	private final Rectangle healthBar;
 	private final Rectangle healthBarBG;
-	private final DoubleProperty bossHealth;
+	
+	/**
+	 * Boss healthbar element
+	 */
+	protected final Rectangle healthBar;
+	/**
+	 * Boss health as binded DoubleProperty value
+	 */
+	protected final DoubleProperty bossHealth;
 	
 	/**
 	 * The healthbar object is constructed.

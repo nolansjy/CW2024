@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import javafx.application.Application;
@@ -14,7 +15,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage stage) throws ClassNotFoundException, NoSuchMethodException, SecurityException,
-			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
 		stage.setTitle(TITLE);
 		stage.setResizable(false);
 		stage.setHeight(SCREEN_HEIGHT);

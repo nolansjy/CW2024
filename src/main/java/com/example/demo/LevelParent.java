@@ -21,9 +21,16 @@ import javafx.scene.Node;
 public abstract class LevelParent {
 
 	private static final String IMAGE_LOCATION = "/com/example/demo/images/";
+	private static final int PLAYER_HEALTH = 5;
 	private final Group root;
+	/**
+	 * Level's Scene node
+	 */
 	protected final Scene scene;
 	private final ImageView background;
+	/**
+	 * Level's UserPlane object
+	 */
 	protected final UserPlane user;
 	
 	private final List<SpriteDestructible> friendlyUnits;
@@ -34,9 +41,9 @@ public abstract class LevelParent {
 	private int currentNumberOfEnemies;
 	private LevelView levelView;
 	protected GameScreen game;
-	protected int playerHealth;
-	
+	protected int playerHealth;	
 	private PropertyChangeSupport support;
+	protected int stageType;
 
 	
 	/**
@@ -48,8 +55,9 @@ public abstract class LevelParent {
 		this.game = game;
 		this.root = game.getRoot();		
 		this.scene = game.getScene();
-		this.background = getBackground(getBackgroundFile(game.getLevelStage()));
-		this.playerHealth = getLevelPlayerHealth(game.getLevelStage());
+		this.background = getBackground(getBackgroundFile(game.getStageType()));
+		this.stageType = game.getStageType();
+		this.playerHealth = PLAYER_HEALTH;
 		this.user = new UserPlane.UserPlaneBuilder().setHealth(playerHealth).load().build();
 		this.friendlyUnits = new ArrayList<>();
 		this.enemyUnits = new ArrayList<>();
@@ -83,13 +91,19 @@ public abstract class LevelParent {
 	protected abstract LevelView instantiateLevelView();
 	
 	/**
-	 * Gets the background of the level as set by the level (e.g. levelStage=2 returns background for stage 2)
-	 * @param levelStage the current level stage number
+	 * Gets the background of the level as set by the level (e.g. stageType=2 returns background for stage 2)
+	 * @param stageType the current stage type
 	 * @return background file name as String
 	 * @throws IOException
 	 */
-	protected abstract String getBackgroundFile(int levelStage) throws IOException;
+	protected abstract String getBackgroundFile(int stageType) throws IOException;
 	
+	/**
+	 * Get alert of a level from level file
+	 * @return level alert as String
+	 */
+	protected abstract String getLevelAlert(int stageType) throws IOException;
+
 	/**
 	 * Gets background of level as ImageView
 	 * @param file name of image file as String
@@ -98,16 +112,8 @@ public abstract class LevelParent {
 	protected ImageView getBackground(String file) {
 		return new ImageView(new Image(getClass().getResourceAsStream(IMAGE_LOCATION+file)));
 	}
+		
 			
-	/**
-	 * Using the below formula, player's health starts at 3 and increases by 1 with each stage
-	 * @param levelStage current level stage number
-	 * @return levelStage+2 as health
-	 */
-	protected int getLevelPlayerHealth(int levelStage) {
-		return 2+levelStage;
-	}
-	
 	/**
 	 * Adds PropertyChangeListener
 	 * @param controller Controller instance
@@ -125,14 +131,17 @@ public abstract class LevelParent {
 		support.firePropertyChange("level", this.getClass().getName(), levelName);
 	}
 	
+	
 	/**
-	 * Sets background, user, and user health display. Not changed from original.
+	 * Sets background, user and levelView elements
 	 * @return Level's Scene node
+	 * @throws IOException 
 	 */
-	public Scene initializeScene() {
+	public Scene initializeScene() throws IOException {
 		initializeBackground();
 		initializeFriendlyUnits();
 		levelView.showHeartDisplay();
+		game.addAlert(String.format("%s %d",getLevelAlert(stageType), game.getDifficulty()));
 		return scene;
 	}
 
@@ -286,12 +295,20 @@ public abstract class LevelParent {
 		return enemyUnits.size();
 	}
 
+	/**
+	 * Adds enemy unit to root
+	 * @param enemy SpriteDestructible
+	 */
 	protected void addEnemyUnit(SpriteDestructible enemy) {
 		enemyUnits.add(enemy);
 		root.getChildren().add(enemy);
 	}
 
 
+	/**
+	 * Returns user isDestroyed state
+	 * @return user.isDestroyed()
+	 */
 	protected boolean userIsDestroyed() {
 		return user.isDestroyed();
 	}
@@ -300,6 +317,10 @@ public abstract class LevelParent {
 		currentNumberOfEnemies = enemyUnits.size();
 	}
 	
+	/**
+	 * Returns background ImageView
+	 * @return background
+	 */
 	protected ImageView getBackground() {
 		return background;
 	}

@@ -6,34 +6,26 @@ import com.example.demo.BossPlane.BossBuilder;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.text.TextAlignment;
 
 /**
  * BossLevel spawns one boss and one player. The levelStage is raised after defeating a boss.
  */
 public class BossLevel extends LevelParent {
 	
-	private static final String NEXT_LEVEL = "com.example.demo.EnemyLevel";
-	private static final int FINAL_STAGE = 3;
+	private static final String ENEMY_LEVEL = "com.example.demo.EnemyLevel";
 	private final BossPlane boss;
 	private BossLevelView levelView;
 	
 	private final JsonNode bossNode;
-	/**
-	 * Health of level's boss
-	 */
-	protected final int bossHealth;
-	/**
-	 * Fire rate of boss
-	 */
-	protected final double bossFireRate;
-	/**
-	 * Probability that shield is activated 
-	 */
-	protected final double bossShieldProbability;
-	/**
-	 * Maximum frames boss Shield is active
-	 */
-	protected final int bossMaxShieldFrames;
+	private final int difficulty;
+	
+	private final int bossHealth;
+	private final double bossFireRate;
+	private final double bossShieldProbability;
+	private final int bossMaxShieldFrames;
 
 	/**
 	 * Reads from bossLevel.json and sets level field configuration, then creates Boss
@@ -42,7 +34,8 @@ public class BossLevel extends LevelParent {
 	 */
 	public BossLevel(final GameScreen game) throws IOException {
 		super(game);
-		this.bossNode = game.getBossData().get(game.getLevelStage());
+		this.bossNode = game.getBossData().get(game.getStageType());
+		this.difficulty = game.getDifficulty();
 		this.bossHealth = getBossHealth();
 		this.bossFireRate = getBossFireRate();
 		this.bossShieldProbability = getBossShieldProbability();
@@ -59,7 +52,8 @@ public class BossLevel extends LevelParent {
 	 * @return boss health by level
 	 */
 	public int getBossHealth() {
-		return bossNode.path("bossHealth").asInt();
+		int health = bossNode.path("bossHealth").asInt();
+		return health+50*difficulty;
 	}
 	
 	/**
@@ -69,8 +63,9 @@ public class BossLevel extends LevelParent {
 	 * @throws IOException
 	 */
 	public int getInitialBossHealth() throws IOException {
-		JsonNode node = game.getBossData().get(game.getLevelStage());
-		return node.path("bossHealth").asInt();
+		JsonNode node = game.getBossData().get(game.getStageType());
+		int health = node.path("bossHealth").asInt();
+		return health+50*difficulty;
 	}
 
 	/**
@@ -78,7 +73,8 @@ public class BossLevel extends LevelParent {
 	 * @return fireRate of BossPlane
 	 */
 	public double getBossFireRate() {
-		return bossNode.path("fireRate").asDouble();
+		double fireRate = bossNode.path("fireRate").asDouble();
+		return fireRate + 0.005*difficulty;
 	}
 
 	/**
@@ -86,7 +82,8 @@ public class BossLevel extends LevelParent {
 	 * @return shieldProbability
 	 */
 	public double getBossShieldProbability() {
-		return bossNode.path("shieldProbability").asDouble();
+		double shieldRate = bossNode.path("shieldProbability").asDouble();
+		return shieldRate + 0.001*difficulty;
 	}
 
 	/**
@@ -94,27 +91,36 @@ public class BossLevel extends LevelParent {
 	 * @return maxShieldFrames
 	 */
 	public int getBossMaxShieldFrames() {
-		return bossNode.path("maxShieldFrames").asInt();
+		int shieldFrames = bossNode.path("maxShieldFrames").asInt();
+		return shieldFrames + 50*difficulty;
 	}
 
 	/**
 	 * Reads current stage's background from bossLevel.json
 	 */
 	@Override
-	public String getBackgroundFile(int levelStage) throws IOException {
-		JsonNode levelNode = game.getBossData().get(levelStage);
+	public String getBackgroundFile(int stageType) throws IOException {
+		JsonNode levelNode = game.getBossData().get(stageType);
 		return levelNode.path("background").asText();
+	}
+	
+	@Override
+	protected String getLevelAlert(int stageType) throws IOException{
+		JsonNode levelNode = game.getBossData().get(stageType);
+		return levelNode.path("alert").asText();
 	}
 	
 	/**
 	 * Adds boss healthbar to the LevelView
+	 * @throws IOException 
 	 */
 	@Override
-	public Scene initializeScene() {
+	public Scene initializeScene() throws IOException {
 		initializeBackground();
 		initializeFriendlyUnits();
 		levelView.showHeartDisplay();
 		levelView.showBossHealth();
+		if(difficulty == 0) game.addAlert(getLevelAlert(stageType));
 		return scene;
 	}
 
@@ -122,9 +128,10 @@ public class BossLevel extends LevelParent {
 	protected void initializeFriendlyUnits() {
 		game.getRoot().getChildren().add(getUser());
 	}
+	
 
 	/**
-	 * When boss is defeated, raise stage level. If final stage is reached, wins the game.
+	 * When boss is defeated, raise stage level. If final stage is reached, prompt to go to next round or stop game.
 	 */
 	@Override
 	protected void checkIfGameOver() {
@@ -132,14 +139,41 @@ public class BossLevel extends LevelParent {
 			game.loseGame();
 		}
 		else if (boss.isDestroyed()) {
-			game.raiseStage();
-			if(game.getLevelStage() > FINAL_STAGE) {
-				game.winGame();
+			if(stageType < 3) {
+				game.nextStageType();
+				goToNextLevel(ENEMY_LEVEL);
 			}else {
-				goToNextLevel(NEXT_LEVEL);
+				promptNextRound();
 			}
-			
 		}
+	}
+	
+	/**
+	 * Creates a dialog to go to the next round or exit the game after three stages have been cleared.
+	 */
+	protected void promptNextRound() {
+		game.getTimeline().stop();
+		Label prompt = new Label();
+		prompt.getStyleClass().add("alert-bg");
+		prompt.setTextAlignment(TextAlignment.CENTER);
+		prompt.setText("Proceed To Next Round? \n (ENTER for YES, ESC for NO)");
+		prompt.setLayoutX(400);
+		prompt.setLayoutY(350);		
+		prompt.setOnKeyPressed(event -> {
+			KeyCode kc = event.getCode();
+			if(kc == KeyCode.ESCAPE) {
+				prompt.setVisible(false);
+				game.winGame();
+			}
+			if(kc == KeyCode.ENTER) {
+				game.setStageType(1);
+				game.raiseDifficulty();
+				goToNextLevel(ENEMY_LEVEL);
+			}
+		});		
+		game.getRoot().getChildren().add(prompt);
+		prompt.requestFocus();
+
 	}
 
 	@Override
@@ -173,6 +207,9 @@ public class BossLevel extends LevelParent {
 		levelView.removeHearts(user.getHealth());
 		levelView.updateBossHealth(boss.getHealth());
 	}
+
+	
+
 
 
 

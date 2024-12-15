@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -39,9 +40,10 @@ public class Controller implements PropertyChangeListener {
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
+	 * @throws IOException 
 	 */
 	public void launchGame() throws ClassNotFoundException, NoSuchMethodException, SecurityException,
-			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
+			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException  {
 			stage.show();
 			goToLevel(ENEMY_LEVEL_CLASS_NAME);
 	}
@@ -59,9 +61,10 @@ public class Controller implements PropertyChangeListener {
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
+	 * @throws IOException 
 	 */
 	private void goToLevel(String className) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
-	IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
 		Class<?> myClass = Class.forName(className); 
 		Constructor<?> constructor = myClass.getConstructor(GameScreen.class); 
 		LevelParent myLevel = (LevelParent) constructor.newInstance(game);
@@ -82,7 +85,7 @@ public class Controller implements PropertyChangeListener {
 			goToLevel((String) evt.getNewValue());
 			
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
-				| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				| IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException e) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText(e.getClass().toString());
 			alert.show();
