@@ -192,7 +192,6 @@ public class BossLevel extends LevelParent {
 		try {
 			bossHealth = getInitialBossHealth();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		levelView = new BossLevelView(game.getRoot(), playerHealth, bossHealth);
