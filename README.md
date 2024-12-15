@@ -6,7 +6,7 @@
 
 **Using Git Repo**
 1. Open Eclipse IDE Workspace
-2. Import > Git > Project from Git > Clone URI (Paste link) > Next/Finish wizard
+2. Import > Git > Project from Git (with smart import) > Clone URI (Paste link) > Next/Finish wizard
 3. When project is loaded, Run > Run As Java Application  
 4. If prompted, select com.example.demo to run
 
