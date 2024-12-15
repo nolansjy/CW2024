@@ -1,0 +1,19 @@
+@font-face {
+	src: url('Orbitron-SemiBold.ttf');
+}
+
+.alert {
+	-fx-text-fill: navy;
+	-fx-font-family: "Orbitron SemiBold";
+	-fx-font-size: 24px;
+}
+
+.alert-bg {
+	-fx-text-fill: navy;	
+	-fx-font-family: "Orbitron SemiBold";
+	-fx-font-size: 24px;
+	-fx-background-color: lightblue;
+	-fx-padding: 5px;
+	-fx-background-radius: 5px;	
+	-fx-width: max-content;
+}
