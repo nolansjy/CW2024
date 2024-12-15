@@ -81,4 +81,5 @@
 
 ## Unexpected Problems
 - Maven Dependency management: Difficulty with adding new modules. A long troubleshooting and trial-and-error process took place before it was finally resolved. 
-- Eclipse Javadoc Generation: Eclipse could not be used to generate Javadoc due to what seems to be a to be a [known issue](https://bugs.eclipse.org/bugs/show_bug.cgi?id=543405) with Eclipse. Maven is used to generate the Javadoc instead using the Maven Javadoc Plugin. Using the Run As configuration: Maven clean, Maven install, then a custom Run Configuration that contains the javadoc:javadoc goal. 
+- Eclipse Javadoc Generation: Eclipse could not be used to generate Javadoc due to what seems to be a to be a [known issue](https://bugs.eclipse.org/bugs/show_bug.cgi?id=543405) with Eclipse. Maven is used to generate the Javadoc instead using the Maven Javadoc Plugin. Using the Run As configuration: Maven clean, Maven install, then a custom Run Configuration that contains the javadoc:javadoc goal.
+- Unit test integration: As mentioned above, configuring unit tests with JavaFX was a problem. Using TestFX helped to make functional unit tests but there is still unexplained exceptions thrown when run, even though they do not affect the actual unit test from running successfully.
