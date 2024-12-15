@@ -107,7 +107,7 @@ public class GameScreen {
 	}
 	
 	/**
-	 * Sets type of stage for all levels (Currently Stage 1-3, Stage 0 for testing)
+	 * Sets type of stage for all levels (There are 3 stages, 1-3, with 0 used for testing)
 	 * @param stageType level's stage type
 	 */
 	protected void setStageType(int stageType) {

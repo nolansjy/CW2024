@@ -45,19 +45,19 @@ public abstract class LevelParent {
 	 */
 	protected GameScreen game;
 	/**
-	 * Player health for this level (not fully implemented)
+	 * Player health for this level (currently a constant)
 	 */
 	protected int playerHealth;	
 	private PropertyChangeSupport support;
 	/**
-	 * Stage type of this level
+	 * Stage type of this level as set by GameScreen 
 	 */
 	protected int stageType;
 
 	
 	/**
 	 * Constructs the level. Creates user plane and LevelView
-	 * @param game Initial GameScreen instance
+	 * @param game Shared GameScreen instance
 	 * @throws IOException
 	 */
 	public LevelParent(final GameScreen game) throws IOException {
